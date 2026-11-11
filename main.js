@@ -59,6 +59,7 @@
   let rx = 400, ry = 60, cardW = 240;
   let pauseUntil = 0;
   let hovering = false;
+  let speed = 1;          // auto-rotation speed multiplier
 
   function layout() {
     const w = stage.clientWidth;
@@ -159,8 +160,11 @@
   window.addEventListener("pointerup", endDrag);
   window.addEventListener("pointercancel", endDrag);
 
-  stage.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") hovering = true; });
-  stage.addEventListener("pointerleave", () => (hovering = false));
+  // hovering a card slows the rotation down instead of stopping it
+  cards.forEach((c) => {
+    c.addEventListener("pointerenter", (e) => { if (e.pointerType === "mouse") hovering = true; });
+    c.addEventListener("pointerleave", () => (hovering = false));
+  });
 
   /* loop */
   let prev = performance.now();
@@ -176,8 +180,10 @@
         const diff = target - angle;
         angle += diff * Math.min(1, 0.1 * dt);
         if (Math.abs(diff) < 0.0005) { angle = target; target = null; }
-      } else if (!reduced && !hovering && now > pauseUntil && !document.hidden) {
-        angle -= 0.0025 * dt; // slow auto-rotation
+      } else if (!reduced && now > pauseUntil && !document.hidden) {
+        // ease the auto-rotation speed toward its target (slower while hovering a card)
+        speed += ((hovering ? 0.2 : 1) - speed) * Math.min(1, 0.06 * dt);
+        angle -= 0.0025 * speed * dt;
       }
     }
     render();
