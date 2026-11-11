@@ -24,6 +24,8 @@
 
   /* Square/16:9 cover: real image if set, otherwise generated placeholder art */
   function cover(p, src) {
+    // animated cover: background + moving layers (used unless a specific src is requested)
+    if (src === undefined && p.animatedCover) return layeredCover(p);
     const image = src !== undefined ? src : p.image;
     const el = document.createElement("div");
     el.className = "art " + (image ? "" : p.shape || "circle");
@@ -37,6 +39,23 @@
       img.draggable = false;
       el.appendChild(img);
     }
+    return el;
+  }
+
+  function layeredCover(p) {
+    const a = p.animatedCover;
+    const el = document.createElement("div");
+    el.className = "art layered";
+    const bg = document.createElement("img");
+    bg.className = "bg"; bg.src = a.bg; bg.alt = p.title; bg.loading = "lazy"; bg.draggable = false;
+    el.appendChild(bg);
+    (a.layers || []).forEach((l) => {
+      const img = document.createElement("img");
+      img.className = "layer"; img.src = l.src; img.alt = ""; img.loading = "lazy"; img.draggable = false;
+      img.setAttribute("aria-hidden", "true");
+      img.style.cssText = `--x:${l.x}%;--y:${l.y}%;--w:${l.w}%;--anim:${l.path};--dur:${l.duration || 9}s;--delay:${l.delay || 0}s`;
+      el.appendChild(img);
+    });
     return el;
   }
 

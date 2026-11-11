@@ -34,7 +34,10 @@
   /* cover */
   const coverEl = document.getElementById("caseCover");
   const heroSrc = p.hero || p.image;
-  if (heroSrc) {
+  if (!p.hero && p.animatedCover) {
+    coverEl.classList.add("is-layered");
+    coverEl.appendChild(cover(p));
+  } else if (heroSrc) {
     const img = el("img");
     img.src = heroSrc; img.alt = p.title;
     coverEl.appendChild(img);

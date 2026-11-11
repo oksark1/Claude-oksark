@@ -13,6 +13,8 @@
                Пока image не указан, рисуется абстрактная обложка из palette + shape.
     palette  — [фон, акцент] для автоматической обложки
     shape    — "circle" | "stripes" | "grid" | "phone" | "type" | "arch"
+    animatedCover — (необязательно) анимированная обложка: фон + слои, которые двигаются
+               (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c в styles.css.
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
     link     — (необязательно) ссылка на живой сайт, Behance и т.п.
@@ -63,6 +65,15 @@ window.PROJECTS = [
     text: "Website for the UTxO Alliance — an initiative that brings together UTXO-based blockchains, university blockchain centers, builders and enthusiasts to make blockchains more scalable.",
     tags: ["Web design", "Landing", "Web3"],
     image: "assets/projects/utxo-cover.webp",
+    // animated cover: cursors drift over the background (positions in % of the square)
+    animatedCover: {
+      bg: "assets/projects/utxo/bg.webp",
+      layers: [
+        { src: "assets/projects/utxo/kate.webp", x: 13.72, y: 39.92, w: 18.72, path: "cursor-a", duration: 9 },
+        { src: "assets/projects/utxo/you.webp",  x: 76.25, y: 63.19, w: 17.97, path: "cursor-c", duration: 8, delay: -3 },
+        { src: "assets/projects/utxo/john.webp", x: 44.73, y: 83.21, w: 19.04, path: "cursor-b", duration: 11, delay: -5 },
+      ],
+    },
     palette: ["#f4f5f8", "#7b2ff7"],
     slug: "utxo-alliance",
     intro: "The UTxO Alliance (UTxOA) is an initiative designed to foster collaboration among UTXO-based blockchains, university and affinity blockchain centers, builders, funders and anyone dedicated to enhancing the scalability of blockchains. The website had to make a technical community feel open and welcoming.",
