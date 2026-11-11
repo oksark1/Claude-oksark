@@ -49,9 +49,9 @@
     const li = document.createElement("li");
     li.className = "work-item";
     li.tabIndex = 0;
-    li.innerHTML = `<span class="num">${pad(i)}</span><span class="name"></span><span class="cat"></span><span class="yr">${p.year}</span><span class="thumb"></span>`;
+    li.setAttribute("aria-label", `${p.title} — ${p.category}, ${p.year}`);
+    li.innerHTML = `<div class="thumb"></div><h3 class="name"></h3>`;
     li.querySelector(".name").textContent = p.title;
-    li.querySelector(".cat").textContent = p.category;
     li.querySelector(".thumb").appendChild(cover(p));
     li.addEventListener("click", () => openProject(i));
     li.addEventListener("keydown", (e) => { if (e.key === "Enter") openProject(i); });
