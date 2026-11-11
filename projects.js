@@ -15,13 +15,13 @@
 */
 window.PROJECTS = [
   {
-    title: "Fintech mobile app",
-    category: "Product design",
+    title: "Uptimescan Bot",
+    category: "Landing page",
     year: 2025,
-    text: "Placeholder — describe the task, your role and the result. For example: redesigned onboarding and payments flow, increasing conversion.",
-    tags: ["UI/UX", "Mobile", "Design system"],
-    palette: ["#1f2a44", "#c8f169"],
-    shape: "phone",
+    text: "Landing page for UptimeScan — a Telegram bot that monitors websites, ports and servers and notifies you the moment a resource goes down. Clean, friendly layout with an interactive chat preview of the bot.",
+    tags: ["Web design", "Landing", "Telegram bot"],
+    image: "assets/projects/uptimescan.webp",
+    palette: ["#0e1f22", "#27a85a"],
   },
   {
     title: "Coffee brand identity",
