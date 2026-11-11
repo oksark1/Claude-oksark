@@ -105,8 +105,8 @@
 
   /* Slow, smooth wheel scrolling (desktop mouse wheel / trackpad). Touch and keyboard keep native scrolling. */
   if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
-    const EASE = 0.075;     // lower = slower, longer glide
-    const SPEED = 0.85;     // wheel distance multiplier
+    const EASE = 0.11;      // lower = slower, longer glide
+    const SPEED = 1;        // wheel distance multiplier
     let target = window.scrollY, current = window.scrollY, running = false;
     const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
     const loop = () => {
