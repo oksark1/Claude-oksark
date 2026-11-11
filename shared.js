@@ -1,5 +1,20 @@
 /* Helpers shared by the home page (main.js) and project pages (project.js). */
 (() => {
+  /* Always start at the top (hero) on load/reload. Keep the browser's own
+     restore only for Back/Forward, and honour #anchors on normal navigation. */
+  const navType = (performance.getEntriesByType("navigation")[0] || {}).type;
+  if (navType !== "back_forward" && "scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+    const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (navType === "reload" && location.hash) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+    if (!location.hash) {
+      toTop();
+      window.addEventListener("load", toTop, { once: true });
+    }
+  }
+
   const projects = window.PROJECTS || [];
 
   const slugify = (s) =>
