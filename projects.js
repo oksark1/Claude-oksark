@@ -15,6 +15,7 @@
     shape    — "circle" | "stripes" | "grid" | "phone" | "type" | "arch"
     animatedCover — (необязательно) анимированная обложка: фон + слои, которые двигаются
                (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c | float в styles.css.
+               bgColor — цвет фона вместо картинки bg; у слоя enter — откуда он выезжает при появлении.
                parallax: true — слои смещаются от мыши и прокрутки (сила — depth у слоя).
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
@@ -204,6 +205,43 @@ window.PROJECTS = [
       { p: "The icon is built on the standard app-icon grid — keylines, circles and diagonals — so the shape sits correctly inside the platform mask and stays balanced from the App Store down to settings-size icons." },
       { h: "Result" },
       { p: "[Placeholder — where the icon is used, launch, feedback.]" },
+    ],
+  },
+  {
+    title: "Okto Payments",
+    category: "Website",
+    year: 2025,
+    text: "Website for Okto Payments — a service to top up Telegram Stars, TON and Telegram Premium, with a playful octopus mascot.",
+    tags: ["Web design", "Fintech", "Telegram", "3D"],
+    image: "assets/projects/okto-cover.webp",
+    // layered cover: tentacles slide out from behind the screen and from below, then sway and parallax
+    animatedCover: {
+      bgColor: "#ffffff",
+      parallax: true,
+      layers: [
+        { src: "assets/projects/okto/tentR.webp", x: 67.44, y: 25.56, w: 33.81, depth: 0.7,
+          enter: "translate(-16cqw, 3cqw) rotate(-8deg)", enterDelay: 0.7, path: "sway", duration: 7, origin: "0% 80%" },
+        { src: "assets/projects/okto/site.webp", x: 9.44, y: 5.44, w: 81.12 },
+        { src: "assets/projects/okto/leg.webp", x: 2.12, y: 75.81, w: 22.62, depth: 1.3,
+          enter: "translate(0, 30cqw)", enterDelay: 0.95, path: "sway-b", duration: 6, delay: -2, origin: "60% 100%" },
+      ],
+    },
+    palette: ["#0b1033", "#3b7bff"],
+    slug: "okto-payments",
+    intro: "Okto Payments lets people top up Telegram Stars, TON and Telegram Premium in a couple of taps — up to 30% cheaper. The website had to make a payment service feel fun and trustworthy at the same time.",
+    body: [
+      { h: "The product" },
+      { p: "A fast and secure way to top up Telegram: choose Stars, TON or Premium, enter a username and an amount, pay with a card via SBP or with crypto. There is also a referral programme — invite friends and earn together." },
+      { h: "The task" },
+      { p: "[Placeholder — describe the brief and your role in the project.]" },
+      { h: "Approach" },
+      { p: "The hero is a deep night sky with soft spotlights, and the top-up form sits right in the middle of it — the main action is available on the first screen. Tabs switch between Stars, TON and Premium, and the payment method is a single tap." },
+      { p: "The brand character is an octopus: glossy 3D tentacles curl around the form, peek from behind the page and hold stars, turning a utilitarian payment flow into something memorable." },
+      { h: "Visual language" },
+      { p: "Dark navy hero, bright blue accents and white cards for the content below. Playful 3D elements — tentacles, stars and the mascot in sunglasses — are balanced by a clean, readable interface." },
+      { img: null, caption: "[Placeholder — more screens: payment flow, referral page, mobile version.]" },
+      { h: "Result" },
+      { p: "[Placeholder — share outcomes: launch, conversion, feedback.]" },
     ],
   },
   {

@@ -208,6 +208,7 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
   position: absolute;
   left: var(--x); top: var(--y);
   width: var(--w); height: auto;
+  transform-origin: var(--origin, 50% 50%);
   animation: var(--anim) var(--dur) cubic-bezier(.45, 0, .25, 1) var(--delay) infinite;
   will-change: transform;
 }
@@ -230,6 +231,21 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
   20% { transform: translate(-6cqw, -3cqw); }
   45% { transform: translate(-2cqw, -9cqw); }
   72% { transform: translate(3cqw, -2cqw); }
+}
+/* entrance: layer starts hidden behind/below, slides to its place once the cover is visible */
+.art.layered img.layer.enter {
+  transform: var(--enter);
+  transition: transform 1.6s cubic-bezier(.16, 1, .3, 1) var(--enter-delay, 0s);
+}
+.art.layered.in img.layer.enter { transform: none; }
+/* idle sway (uses the separate `rotate` property, so it combines with entrance and parallax) */
+@keyframes sway {
+  0%, 100% { rotate: 0deg; }
+  50% { rotate: -5deg; }
+}
+@keyframes sway-b {
+  0%, 100% { rotate: 0deg; }
+  50% { rotate: 4deg; }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -309,4 +325,5 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
   html { scroll-behavior: auto; }
   .work-item.reveal .thumb { opacity: 1; transform: none; transition: none; }
   .art.layered img.layer { animation: none; }
+  .art.layered img.layer.enter { transform: none; transition: none; }
 }

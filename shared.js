@@ -46,21 +46,37 @@
     const a = p.animatedCover;
     const el = document.createElement("div");
     el.className = "art layered" + (a.parallax ? " parallax" : "");
-    const bg = document.createElement("img");
-    bg.className = "bg"; bg.src = a.bg; bg.alt = p.title; bg.loading = "lazy"; bg.draggable = false;
-    el.appendChild(bg);
+    if (a.bgColor) el.style.background = a.bgColor;
+    if (a.bg) {
+      const bg = document.createElement("img");
+      bg.className = "bg"; bg.src = a.bg; bg.alt = p.title; bg.loading = "lazy"; bg.draggable = false;
+      el.appendChild(bg);
+    } else {
+      el.setAttribute("role", "img"); el.setAttribute("aria-label", p.title);
+    }
+    let entering = false;
     (a.layers || []).forEach((l) => {
       const img = document.createElement("img");
-      img.className = "layer"; img.src = l.src; img.alt = ""; img.loading = "lazy"; img.draggable = false;
+      img.className = "layer" + (l.enter ? " enter" : ""); img.src = l.src; img.alt = ""; img.loading = "lazy"; img.draggable = false;
       img.setAttribute("aria-hidden", "true");
-      img.style.cssText = `--x:${l.x}%;--y:${l.y}%;--w:${l.w}%;--anim:${l.path};--dur:${l.duration || 9}s;--delay:${l.delay || 0}s;--depth:${l.depth || 0}`;
+      img.style.cssText =
+        `--x:${l.x}%;--y:${l.y}%;--w:${l.w}%;--anim:${l.path || "none"};--dur:${l.duration || 9}s;` +
+        `--delay:${l.delay || 0}s;--depth:${l.depth || 0};--origin:${l.origin || "50% 50%"};` +
+        (l.enter ? `--enter:${l.enter};--enter-delay:${l.enterDelay || 0}s;` : "");
+      if (l.enter) entering = true;
       el.appendChild(img);
     });
+    if (entering) enterObserver.observe(el);
     return el;
   }
 
-  // projects with `external: true` open their live site (p.link) in a new tab instead of a case page
-  const isExternal = (p) => !!(p.external && p.link);
+  /* Layers with `enter` slide in (from behind / below) when the cover scrolls into view */
+  const enterObserver = "IntersectionObserver" in window
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); enterObserver.unobserve(e.target); } });
+      }, { threshold: 0.35 })
+    : { observe: (el) => el.classList.add("in") };
+
   /* Parallax for layered covers marked `parallax`: layers follow the pointer and scroll position */
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduceMotion) {
@@ -87,6 +103,8 @@
     requestAnimationFrame(tick);
   }
 
+  // projects with `external: true` open their live site (p.link) in a new tab instead of a case page
+  const isExternal = (p) => !!(p.external && p.link);
   const projectUrl = (p) => (isExternal(p) ? p.link : `project.html?p=${encodeURIComponent(p.slug)}`);
   const linkTo = (a, p) => {
     a.href = projectUrl(p);
