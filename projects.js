@@ -20,6 +20,7 @@
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
     placeholder — (необязательно) true: проект-заглушка, скрыт из сетки работ.
+    noPage   — (необязательно) true: у проекта пока нет страницы, карточка не кликается.
     external — (необязательно) true: по клику на карточку открывается сайт из link
                в новой вкладке, а не страница кейса.
     link     — (необязательно) ссылка на живой сайт, Behance и т.п.
@@ -243,6 +244,17 @@ window.PROJECTS = [
       { h: "Result" },
       { p: "[Placeholder — share outcomes: launch, conversion, feedback.]" },
     ],
+  },
+  {
+    title: "Dreamina AI",
+    category: "Mobile app",
+    year: 2025,
+    text: "Mobile app for Dreamina AI — an AI image generator: prompt-based generator screen and a Pro subscription paywall.",
+    tags: ["Mobile", "AI", "UI/UX"],
+    image: "assets/projects/dreamina-cover.webp",
+    palette: ["#0b0d10", "#00c8e0"],
+    slug: "dreamina-ai",
+    noPage: true, // no case page yet: the card is shown but not clickable
   },
   {
     title: "Coffee brand identity",

@@ -82,7 +82,7 @@
 
   /* next project */
   // next real project (placeholders are skipped)
-  const real = projects.filter((x) => !x.placeholder);
+  const real = projects.filter((x) => !x.placeholder && !x.noPage);
   const ri = real.indexOf(p);
   const next = real.length ? real[(ri + 1) % real.length] : projects[(i + 1) % projects.length];
   const nav = document.getElementById("caseNext");

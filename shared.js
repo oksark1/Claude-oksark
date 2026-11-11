@@ -157,7 +157,7 @@
     };
     const stateFor = (el) => {
       if (!el || !el.closest || document.documentElement.classList.contains("is-loading")) return ["default"];
-      const proj = el.closest(".work-item a, .next-link, .card, a.client-link");
+      const proj = el.closest(".work-item a, .next-link, .card:not(.no-page), a.client-link");
       if (proj) {
         const external = proj.target === "_blank";
         return ["label", external ? "Visit ↗" : "View"];
