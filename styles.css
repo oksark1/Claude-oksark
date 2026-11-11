@@ -25,9 +25,17 @@ html.sound-on {
   --thumb: #1a1a1a;
   color-scheme: dark;
 }
-/* smooth switch between themes (class is set for ~1s by audio.js) */
-html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
-  transition: background-color .9s ease, color .9s ease, border-color .9s ease !important;
+/* smooth switch between themes (class is set for ~1.5s by audio.js).
+   Text inherits its colour from <body>, so only elements that set their own colours get a transition —
+   transitioning every element made nested text "chase" its parent and jump. */
+html.theme-anim body,
+html.theme-anim .header,
+html.theme-anim .muted,
+html.theme-anim .btn,
+html.theme-anim .work-item .thumb,
+html.theme-anim .case-body figure img,
+html.theme-anim .cursor-label {
+  transition: background-color 1s ease, color 1s ease, border-color 1s ease !important;
 }
 
 * { box-sizing: border-box; }
