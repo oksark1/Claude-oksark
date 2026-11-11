@@ -211,8 +211,9 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .case-meta { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 0 20px; justify-self: end; }
 .case-meta dd { margin: 0; }
 
-.case-cover { margin: 55px var(--pad) 0; background: #ededed; }
-.case-cover img { display: block; width: 100%; height: auto; }
+.case-cover { margin: 55px var(--pad) 0; }
+/* tall/square covers are capped to the viewport height so they never get huge */
+.case-cover img { display: block; width: auto; max-width: 100%; height: auto; max-height: 88svh; margin: 0 auto; }
 .case-cover.is-art { position: relative; aspect-ratio: 16 / 9; --h: 600px; }
 
 .case-body {
