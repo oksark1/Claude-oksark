@@ -71,7 +71,7 @@
     const h = stage.clientHeight;
     const mH = model.getBoundingClientRect().height || h * 0.6;
     const mobile = w < 860;
-    cardW = mobile ? Math.max(92, Math.min(130, w * 0.26)) : Math.min(210, Math.max(150, w * 0.13));
+    cardW = mobile ? Math.max(64, Math.min(96, w * 0.19)) : Math.min(210, Math.max(150, w * 0.13));
     rx = mobile ? w * 0.38 : Math.min(w * 0.34, mH * 0.85 + cardW * 0.3);
     ry = mH * (mobile ? 0.26 : 0.2);
     orbit.style.setProperty("--card-w", cardW + "px");
