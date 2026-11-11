@@ -12,6 +12,21 @@
   if (!root.classList.contains("is-loading")) { loader.remove(); return; }
 
   const { projects, cover } = window.Site;
+
+  /* block scrolling while loading, but keep the scrollbar (no layout jump when it ends) */
+  const block = (e) => { e.preventDefault(); e.stopImmediatePropagation(); };
+  const keyBlock = (e) => {
+    if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", " ", "Home", "End"].includes(e.key)) block(e);
+  };
+  addEventListener("wheel", block, { capture: true, passive: false });
+  addEventListener("touchmove", block, { capture: true, passive: false });
+  addEventListener("keydown", keyBlock, { capture: true });
+  const unblock = () => {
+    removeEventListener("wheel", block, { capture: true });
+    removeEventListener("touchmove", block, { capture: true });
+    removeEventListener("keydown", keyBlock, { capture: true });
+  };
+  window.scrollTo(0, 0);
   const featured = projects.slice(0, 9);
   const DURATION = 1700;
 
@@ -112,6 +127,7 @@
     // when the cards land, hand over to the real carousel
     setTimeout(() => {
       root.classList.remove("is-loading");
+      unblock();
       loader.classList.add("gone");
       setTimeout(() => loader.remove(), 700);
     }, 850 + featured.length * 35);

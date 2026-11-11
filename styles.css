@@ -351,7 +351,8 @@ html.theme-anim .model-night { transition: opacity 1.4s cubic-bezier(.4, 0, .2, 
 
 /* ---------- Intro loader ---------- */
 .loader { display: none; }
-html.is-loading { overflow: hidden; }
+/* keep the real scrollbar visible while loading (scrolling is blocked in loader.js), so nothing jumps */
+html { scrollbar-gutter: stable; }
 html.is-loading .loader {
   display: block;
   position: fixed; inset: 0; z-index: 900;

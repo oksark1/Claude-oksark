@@ -108,10 +108,14 @@
       const scale = 0.55 + 0.45 * depth;
       const c = cards[i];
       c.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${scale.toFixed(3)}) rotateY(${(-s * 18).toFixed(1)}deg)`;
-      c.style.opacity = (0.35 + 0.65 * depth).toFixed(3);
-      c.style.filter = depth < 0.45 ? `blur(${((0.45 - depth) * 5).toFixed(1)}px)` : "none";
+      // passing beside the model (z ≈ 0) the card fades out, so the swap behind/in front is invisible
+      const side = Math.min(1, Math.abs(z) / 0.32);
+      const fade = 0.08 + 0.92 * side * side * (3 - 2 * side);     // smoothstep
+      c.style.opacity = ((0.35 + 0.65 * depth) * fade).toFixed(3);
+      const blur = (depth < 0.45 ? (0.45 - depth) * 5 : 0) + (1 - side) * 2.5;
+      c.style.filter = blur > 0.05 ? `blur(${blur.toFixed(1)}px)` : "none";
       // behind the model when on the far side of the orbit
-      c.style.zIndex = z < -0.05 ? String(Math.round(depth * 9)) : String(11 + Math.round(depth * 20));
+      c.style.zIndex = z < 0 ? String(Math.round(depth * 9)) : String(11 + Math.round(depth * 20));
       if (z > best) { best = z; bestI = i; }
     }
     setActive(bestI);
