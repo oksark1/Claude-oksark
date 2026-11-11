@@ -7,8 +7,12 @@
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const pad = (i) => String(i + 1).padStart(2, "0");
 
-  const { cover, projectUrl } = window.Site;
-  const openProject = (i) => { window.location.href = projectUrl(featured[i]); };
+  const { cover, projectUrl, linkTo, isExternal } = window.Site;
+  const openProject = (i) => {
+    const p = featured[i];
+    if (isExternal(p)) window.open(projectUrl(p), "_blank", "noopener");
+    else window.location.href = projectUrl(p);
+  };
 
   /* ---------- Work list ---------- */
   const list = document.getElementById("workList");
@@ -16,7 +20,7 @@
     const li = document.createElement("li");
     li.className = "work-item";
     const a = document.createElement("a");
-    a.href = projectUrl(p);
+    linkTo(a, p);
     a.setAttribute("aria-label", `${p.title} — ${p.category}, ${p.year}`);
     a.innerHTML = `<div class="thumb"></div><h3 class="name"></h3>`;
     a.querySelector(".name").textContent = p.title;

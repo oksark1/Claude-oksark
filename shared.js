@@ -59,9 +59,15 @@
     return el;
   }
 
-  const projectUrl = (p) => `project.html?p=${encodeURIComponent(p.slug)}`;
+  // projects with `external: true` open their live site (p.link) in a new tab instead of a case page
+  const isExternal = (p) => !!(p.external && p.link);
+  const projectUrl = (p) => (isExternal(p) ? p.link : `project.html?p=${encodeURIComponent(p.slug)}`);
+  const linkTo = (a, p) => {
+    a.href = projectUrl(p);
+    if (isExternal(p)) { a.target = "_blank"; a.rel = "noopener"; }
+  };
 
-  window.Site = { projects, cover, projectUrl, slugify };
+  window.Site = { projects, cover, projectUrl, linkTo, isExternal, slugify };
 
   const y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();

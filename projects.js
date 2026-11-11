@@ -17,6 +17,8 @@
                (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c в styles.css.
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
+    external — (необязательно) true: по клику на карточку открывается сайт из link
+               в новой вкладке, а не страница кейса.
     link     — (необязательно) ссылка на живой сайт, Behance и т.п.
     slug     — (необязательно) адрес страницы: project.html?p=<slug>.
                Если не указан, создаётся из названия.
@@ -125,6 +127,7 @@ window.PROJECTS = [
     palette: ["#0b0b0b", "#f3ead9"],
     slug: "artglacio",
     link: "https://www.artglacio.lt/en",
+    external: true, // card opens the live site instead of the case page
     intro: "Art Glacio believes joy has no age — it simply changes its flavor. So instead of an ordinary product site, the brand opened “The World Ice Cream Center”: a digital museum where every flavor is an exhibit and every visit starts with an invitation.",
     body: [
       { h: "The idea" },

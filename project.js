@@ -1,5 +1,5 @@
 (() => {
-  const { projects, cover, projectUrl } = window.Site;
+  const { projects, cover, linkTo } = window.Site;
   const slug = new URLSearchParams(location.search).get("p");
   let i = projects.findIndex((p) => p.slug === slug);
   if (i < 0) { location.replace("index.html#work"); return; }
@@ -85,7 +85,7 @@
   const nav = document.getElementById("caseNext");
   nav.append(el("p", "muted", "Next project"));
   const a = el("a", "next-link");
-  a.href = projectUrl(next);
+  linkTo(a, next);
   const thumb = el("div", "thumb");
   thumb.appendChild(cover(next));
   a.append(thumb, el("span", "name", `${next.title} →`));
