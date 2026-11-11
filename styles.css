@@ -373,15 +373,12 @@ html.landing .model { opacity: 1; transition: opacity .7s ease; }
 html.landing .stage { z-index: 950; }
 html.landing .hero { overflow: visible; }
 
-/* big name in the centre, flies into the header logo at the end */
+/* name stays exactly where the header logo is (same size), above the loader backdrop */
 .loader-title { display: none; }
 html.is-loading .loader-title {
   display: block;
-  position: fixed; left: 50%; top: 50%; z-index: 960;
-  transform: translate(-50%, -50%);
-  transform-origin: 0 0;
-  font-size: min(11vw, 150px);
-  line-height: 1.4; letter-spacing: 0.01em; font-weight: 400;
+  position: fixed; z-index: 960;
+  font-size: var(--fs); line-height: var(--lh); letter-spacing: 0.01em; font-weight: 400;
   white-space: nowrap;
   color: var(--text);
   pointer-events: none;

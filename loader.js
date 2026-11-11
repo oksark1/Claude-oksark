@@ -13,6 +13,17 @@
 
   const { projects, cover } = window.Site;
 
+  /* the name sits exactly on top of the header logo while the backdrop covers the page */
+  const title = document.getElementById("loaderTitle");
+  const logo = document.querySelector(".header .logo");
+  const placeTitle = () => {
+    if (!title || !logo) return;
+    const r = logo.getBoundingClientRect();
+    title.style.left = r.left + "px"; title.style.top = r.top + "px";
+  };
+  placeTitle();
+  addEventListener("resize", placeTitle);
+
   /* block scrolling while loading, but keep the scrollbar (no layout jump when it ends) */
   const block = (e) => { e.preventDefault(); e.stopImmediatePropagation(); };
   const keyBlock = (e) => {
@@ -114,32 +125,16 @@
     // hand the cards over to the real carousel: it flies its own cards from these positions
     const points = cards.map((c) => ({ x: c.x, y: c.y, size: sz * c.s }));
     const total = window.Orbit ? window.Orbit.land(points) : 0;
-    flyTitle(total);
     root.classList.add("landing");               // real cards become visible
     cards.forEach((c) => (c.el.style.opacity = "0"));
     setTimeout(() => {
       root.classList.remove("is-loading", "landing");
-      const title = document.getElementById("loaderTitle"); if (title) title.remove();
+      if (title) title.remove();
+      removeEventListener("resize", placeTitle);
       unblock();
       loader.classList.add("gone");
       setTimeout(() => { loader.remove(); wrap.remove(); }, 700);
     }, total);
-  }
-
-  /* the big name glides into the header logo */
-  function flyTitle(duration) {
-    const title = document.getElementById("loaderTitle");
-    const logo = document.querySelector(".header .logo");
-    if (!title || !logo) return;
-    const r0 = title.getBoundingClientRect();
-    const r1 = logo.getBoundingClientRect();
-    // switch from centred to absolute coordinates without a visual jump
-    title.style.left = r0.left + "px"; title.style.top = r0.top + "px";
-    title.style.transform = "none";
-    title.offsetWidth;
-    title.style.transition = `transform ${Math.max(700, duration - 100)}ms cubic-bezier(.7,0,.2,1)`;
-    const k = r1.width / r0.width;
-    title.style.transform = `translate(${r1.left - r0.left}px, ${r1.top - r0.top}px) scale(${k.toFixed(5)})`;
   }
 
   // safety net: never block the page for more than 6s
