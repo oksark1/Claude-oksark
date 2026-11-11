@@ -128,6 +128,60 @@
     window.addEventListener("scroll", () => { if (!running) target = current = window.scrollY; }, { passive: true });
   }
 
+  /* Custom cursor (desktop mouse only): a small square that follows the pointer,
+     grows on links and shows a label over projects ("View" / "Visit ↗") and the hero ("Drag"). */
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const cur = document.createElement("div");          // state holder + label (normal blending)
+    cur.className = "cursor";
+    cur.setAttribute("aria-hidden", "true");
+    cur.innerHTML = '<span class="cursor-label"></span>';
+    const label = cur.firstChild;
+    const dot = document.createElement("div");          // the square, inverts what is under it
+    dot.className = "cursor-dot";
+    dot.setAttribute("aria-hidden", "true");
+    document.body.append(dot, cur);
+    document.documentElement.classList.add("has-cursor");
+
+    let x = -100, y = -100, cx = x, cy = y, shown = false;
+    const follow = () => {
+      const k = reduceMotion ? 1 : 0.22;
+      cx += (x - cx) * k; cy += (y - cy) * k;
+      cur.style.transform = dot.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+      requestAnimationFrame(follow);
+    };
+    requestAnimationFrame(follow);
+
+    const setState = (state, text) => {
+      cur.dataset.state = dot.dataset.state = state;
+      label.textContent = text || "";
+    };
+    const stateFor = (el) => {
+      if (!el || !el.closest) return ["default"];
+      const proj = el.closest(".work-item a, .next-link, .card");
+      if (proj) {
+        const external = proj.target === "_blank";
+        return ["label", external ? "Visit ↗" : "View"];
+      }
+      if (el.closest("#stage")) return ["label", "Drag"];
+      if (el.closest("a, button, [role=button]")) return ["link"];
+      return ["default"];
+    };
+
+    window.addEventListener("pointermove", (e) => {
+      if (e.pointerType !== "mouse") return;
+      x = e.clientX; y = e.clientY;
+      if (!shown) { cx = x; cy = y; shown = true; cur.classList.add("visible"); dot.classList.add("visible"); }
+      const [state, text] = stateFor(e.target);
+      if (cur.dataset.state !== state || label.textContent !== (text || "")) setState(state, text);
+    }, { passive: true });
+    const both = (fn) => [cur, dot].forEach(fn);
+    document.addEventListener("pointerleave", () => both((el) => el.classList.remove("visible")));
+    document.addEventListener("pointerenter", () => { if (shown) both((el) => el.classList.add("visible")); });
+    window.addEventListener("pointerdown", () => both((el) => el.classList.add("down")));
+    window.addEventListener("pointerup", () => both((el) => el.classList.remove("down")));
+    setState("default");
+  }
+
   // projects with `external: true` open their live site (p.link) in a new tab instead of a case page
   const isExternal = (p) => !!(p.external && p.link);
   const projectUrl = (p) => (isExternal(p) ? p.link : `project.html?p=${encodeURIComponent(p.slug)}`);
