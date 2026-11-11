@@ -156,7 +156,7 @@
       label.textContent = text || "";
     };
     const stateFor = (el) => {
-      if (!el || !el.closest) return ["default"];
+      if (!el || !el.closest || document.documentElement.classList.contains("is-loading")) return ["default"];
       const proj = el.closest(".work-item a, .next-link, .card");
       if (proj) {
         const external = proj.target === "_blank";

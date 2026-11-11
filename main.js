@@ -68,7 +68,7 @@
   let active = -1;
   let rx = 400, ry = 60, cardW = 240;
   let hovering = false;
-  let speed = 1;          // auto-rotation speed multiplier
+  let speed = document.documentElement.classList.contains("is-loading") ? 0 : 1;          // auto-rotation speed multiplier
 
   function layout() {
     const w = stage.clientWidth;
@@ -178,7 +178,8 @@
   function tick(now) {
     const dt = Math.min(48, now - prev) / 16.67;
     prev = now;
-    if (!dragging) {
+    const loading = document.documentElement.classList.contains("is-loading"); // hold still under the loader
+    if (!dragging && !loading) {
       if (target !== null) {
         // arrows / clicks: glide to the chosen card, then keep slowly rotating
         const diff = target - angle;
@@ -202,7 +203,11 @@
     requestAnimationFrame(tick);
   }
 
-  const start = () => { layout(); render(); requestAnimationFrame(tick); };
+  const start = () => {
+    layout(); render(); requestAnimationFrame(tick);
+    document.documentElement.classList.add("orbit-ready"); // the loader waits for this
+    window.dispatchEvent(new Event("orbitready"));
+  };
   window.addEventListener("resize", layout);
   const modelImg = model.querySelector(".model-img");
   if (modelImg.complete) start(); else modelImg.addEventListener("load", start, { once: true });
