@@ -1,7 +1,6 @@
 /*
-  Generative "cosmic" ambient in a Japanese mood — built with the Web Audio API, no audio files.
-  Layers: low drone · slow breathing pads · koto-like plucks · glassy bells · soft "space wind",
-  all on the In (Miyako-bushi) pentatonic scale, through a long reverb and a soft delay.
+  Generative ambient piano in a calm, nostalgic "blocky sandbox game" mood — Web Audio API, no files.
+  Original music: sparse soft piano over slow major-seventh chords, a warm pad and a roomy reverb.
   Starts only after the visitor turns it on (browsers block autoplay with sound).
 */
 (() => {
@@ -14,19 +13,30 @@
     set: (v) => { try { localStorage.setItem(KEY, v); } catch (_) {} },
   };
 
-  // In scale on D: D Eb G A Bb (semitones from root)
-  const ROOT = 62; // D4 (MIDI)
-  const SCALE = [0, 1, 5, 7, 8];
   const hz = (m) => 440 * Math.pow(2, (m - 69) / 12);
-  const note = (deg, oct = 0) => {
-    const n = SCALE.length;
-    const o = Math.floor(deg / n) + oct;
-    return ROOT + SCALE[((deg % n) + n) % n] + 12 * o;
-  };
   const rand = (a, b) => a + Math.random() * (b - a);
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-  let ctx, master, dry, wet, timers = [], playing = false, drones = [];
+  // Key of C major. Chords as MIDI notes (bass, then upper voices); melody uses chord tones + scale.
+  const CHORDS = [
+    { name: "Cmaj7", bass: 36, tones: [48, 52, 55, 59] },
+    { name: "Fmaj7", bass: 41, tones: [48, 53, 57, 64] },
+    { name: "Am7",   bass: 45, tones: [48, 52, 55, 57] },
+    { name: "Em7",   bass: 40, tones: [47, 50, 55, 59] },
+    { name: "Dm9",   bass: 38, tones: [50, 53, 57, 64] },
+    { name: "G6",    bass: 43, tones: [47, 50, 52, 55] },
+  ];
+  const PROGRESSIONS = [
+    [0, 1, 0, 1],       // Cmaj7 – Fmaj7
+    [0, 1, 2, 1],       // Cmaj7 – Fmaj7 – Am7 – Fmaj7
+    [2, 1, 0, 5],       // Am7 – Fmaj7 – Cmaj7 – G6
+    [0, 3, 1, 4],       // Cmaj7 – Em7 – Fmaj7 – Dm9
+  ];
+  const SCALE = [0, 2, 4, 5, 7, 9, 11];
+  const inScale = (m) => SCALE.includes(((m % 12) + 12) % 12);
+
+  let ctx, master, dry, wet, delaySend, timers = [], playing = false;
+  let prog = PROGRESSIONS[0], step = 0, chord = CHORDS[0], lastMel = 72;
 
   function impulse(seconds, decay) {
     const len = Math.floor(ctx.sampleRate * seconds);
@@ -41,122 +51,85 @@
   function build() {
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     master = ctx.createGain(); master.gain.value = 0;
-    const comp = ctx.createDynamicsCompressor();
-    comp.threshold.value = -18; comp.ratio.value = 3;
-    master.connect(comp).connect(ctx.destination);
+    const warm = ctx.createBiquadFilter(); warm.type = "lowpass"; warm.frequency.value = 5200;
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -16; comp.ratio.value = 2.5;
+    master.connect(warm).connect(comp).connect(ctx.destination);
 
-    // dry bus + big reverb + soft feedback delay
-    dry = ctx.createGain(); dry.gain.value = 0.55; dry.connect(master);
-    const verb = ctx.createConvolver(); verb.buffer = impulse(7, 2.6);
-    wet = ctx.createGain(); wet.gain.value = 0.9;
-    wet.connect(verb).connect(master);
+    dry = ctx.createGain(); dry.gain.value = 0.7; dry.connect(master);
+    const verb = ctx.createConvolver(); verb.buffer = impulse(4.5, 2.8);
+    wet = ctx.createGain(); wet.gain.value = 0.55; wet.connect(verb).connect(master);
 
-    const delay = ctx.createDelay(2); delay.delayTime.value = 0.62;
-    const fb = ctx.createGain(); fb.gain.value = 0.38;
-    const dlp = ctx.createBiquadFilter(); dlp.type = "lowpass"; dlp.frequency.value = 2200;
-    delay.connect(dlp).connect(fb).connect(delay);
-    dlp.connect(wet);
-    const delaySend = ctx.createGain(); delaySend.gain.value = 0.35; delaySend.connect(delay);
-    build.delaySend = delaySend;
-
-    startDrone();
-    startWind();
+    const delay = ctx.createDelay(2); delay.delayTime.value = 0.48;
+    const fb = ctx.createGain(); fb.gain.value = 0.28;
+    const dlp = ctx.createBiquadFilter(); dlp.type = "lowpass"; dlp.frequency.value = 1800;
+    delay.connect(dlp).connect(fb).connect(delay); dlp.connect(wet);
+    delaySend = ctx.createGain(); delaySend.gain.value = 0.22; delaySend.connect(delay);
   }
 
-  /* — low drone: root + fifth, slowly breathing filter — */
-  function startDrone() {
-    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 380; lp.Q.value = 0.7;
-    const g = ctx.createGain(); g.gain.value = 0.11;
-    lp.connect(g); g.connect(dry); g.connect(wet);
-    [[note(0, -2), -6], [note(0, -2), 5], [note(3, -2), 0]].forEach(([m, det]) => {
-      const o = ctx.createOscillator(); o.type = "triangle";
-      o.frequency.value = hz(m); o.detune.value = det;
-      o.connect(lp); o.start(); drones.push(o);
-    });
-    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.035;
-    const depth = ctx.createGain(); depth.gain.value = 180;
-    lfo.connect(depth).connect(lp.frequency); lfo.start(); drones.push(lfo);
-  }
-
-  /* — very quiet filtered noise, like distant cosmic wind — */
-  function startWind() {
-    const len = ctx.sampleRate * 4, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0);
-    for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-    const src = ctx.createBufferSource(); src.buffer = buf; src.loop = true;
-    const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 900; bp.Q.value = 1.4;
-    const g = ctx.createGain(); g.gain.value = 0.012;
-    src.connect(bp).connect(g).connect(wet);
-    const lfo = ctx.createOscillator(); lfo.frequency.value = 0.05;
-    const depth = ctx.createGain(); depth.gain.value = 600;
-    lfo.connect(depth).connect(bp.frequency);
-    src.start(); lfo.start(); drones.push(src, lfo);
-  }
-
-  /* — pads: 3-note chords from the scale, slow attack and release — */
-  function pad() {
-    const t = ctx.currentTime, dur = rand(9, 13);
-    const base = pick([0, 2, 3, 5, -2]);
-    [base, base + 2, base + 4].forEach((deg, i) => {
-      const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 900 + i * 150;
-      const g = ctx.createGain(); g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.035, t + 4);
-      g.gain.linearRampToValueAtTime(0, t + dur);
-      lp.connect(g); g.connect(dry); g.connect(wet);
-      [-7, 7].forEach((det) => {
-        const o = ctx.createOscillator(); o.type = "sawtooth";
-        o.frequency.value = hz(note(deg, -1)); o.detune.value = det;
-        o.connect(lp); o.start(t); o.stop(t + dur + 0.1);
-      });
-    });
-    later(pad, dur - rand(2, 4));
-  }
-
-  /* — koto-like pluck: bright attack, tiny pitch drop, quick decay — */
-  function pluck(m, when, vel = 1) {
+  /* — soft piano: sine partials, gentle hammer, long exponential decay — */
+  function piano(m, when, vel = 0.7, send = 0) {
     const t = when, f = hz(m);
+    const len = Math.max(2.2, 6.5 - (m - 48) * 0.06);          // low notes ring longer
     const g = ctx.createGain();
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(0.09 * vel, t + 0.004);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
+    g.gain.linearRampToValueAtTime(0.24 * vel, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.1 * vel, t + 0.35);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + len);
     const lp = ctx.createBiquadFilter(); lp.type = "lowpass";
-    lp.frequency.setValueAtTime(4200, t); lp.frequency.exponentialRampToValueAtTime(700, t + 1.2);
-    lp.connect(g); g.connect(dry); g.connect(wet); g.connect(build.delaySend);
-    [["triangle", 1, 1], ["sine", 2, 0.35], ["sine", 3, 0.12]].forEach(([type, mult, amp]) => {
-      const o = ctx.createOscillator(); o.type = type;
-      o.frequency.setValueAtTime(f * mult * 1.012, t);
-      o.frequency.exponentialRampToValueAtTime(f * mult, t + 0.08);
+    lp.frequency.setValueAtTime(1400 + 2600 * vel, t);
+    lp.frequency.exponentialRampToValueAtTime(700, t + len * 0.7);
+    lp.connect(g); g.connect(dry); g.connect(wet); if (send) g.connect(delaySend);
+    [[1, 1, 0], [1, 0.6, 4], [2, 0.32, -3], [3, 0.1, 2], [4, 0.04, 0]].forEach(([mult, amp, det]) => {
+      const o = ctx.createOscillator(); o.type = "sine";
+      o.frequency.value = f * mult; o.detune.value = det;
       const og = ctx.createGain(); og.gain.value = amp;
-      o.connect(og).connect(lp); o.start(t); o.stop(t + 2.4);
+      o.connect(og).connect(lp); o.start(t); o.stop(t + len + 0.1);
     });
   }
 
-  function phrase() {
-    const t = ctx.currentTime + 0.05;
-    let deg = Math.floor(rand(2, 9));
-    const count = pick([1, 2, 3, 3, 4, 5]);
-    let at = t;
-    for (let i = 0; i < count; i++) {
-      pluck(note(deg, 0), at, rand(0.55, 1));
-      if (Math.random() < 0.18) pluck(note(deg - 5, 0), at + 0.02, 0.4); // octave below
-      deg += pick([-2, -1, -1, 1, 1, 2]);
-      at += pick([0.32, 0.45, 0.6, 0.9]);
-    }
-    later(phrase, at - t + rand(2.5, 7));
+  /* — warm pad under each chord — */
+  function pad(c, t, dur) {
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 650;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(0.035, t + 3);
+    g.gain.linearRampToValueAtTime(0, t + dur + 2);
+    lp.connect(g); g.connect(wet); g.connect(dry);
+    c.tones.slice(0, 3).forEach((m) => [-5, 5].forEach((det) => {
+      const o = ctx.createOscillator(); o.type = "triangle";
+      o.frequency.value = hz(m); o.detune.value = det;
+      o.connect(lp); o.start(t); o.stop(t + dur + 2.2);
+    }));
   }
 
-  /* — glassy bell (simple FM), rare and high — */
-  function bell() {
-    const t = ctx.currentTime, f = hz(note(Math.floor(rand(0, 6)), 1));
-    const car = ctx.createOscillator(); car.frequency.value = f;
-    const mod = ctx.createOscillator(); mod.frequency.value = f * 3.5;
-    const mg = ctx.createGain(); mg.gain.setValueAtTime(f * 1.6, t); mg.gain.exponentialRampToValueAtTime(1, t + 3);
-    mod.connect(mg).connect(car.frequency);
-    const g = ctx.createGain(); g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(0.03, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 5);
-    car.connect(g); g.connect(wet); g.connect(build.delaySend);
-    car.start(t); mod.start(t); car.stop(t + 5.2); mod.stop(t + 5.2);
-    later(bell, rand(9, 18));
+  /* — one bar: a chord (spread or arpeggiated), plus a few unhurried melody notes — */
+  function bar() {
+    if (step % prog.length === 0 && step > 0 && Math.random() < 0.5) prog = pick(PROGRESSIONS);
+    chord = CHORDS[prog[step % prog.length]]; step++;
+    const t = ctx.currentTime + 0.1, dur = pick([7, 8, 8, 9]);
+    pad(chord, t, dur);
+
+    // left hand: bass + gently rolled chord, sometimes a slow arpeggio
+    piano(chord.bass, t, 0.55);
+    if (Math.random() < 0.55) {
+      chord.tones.forEach((m, i) => piano(m, t + 0.05 + i * 0.07, 0.38));
+    } else {
+      chord.tones.forEach((m, i) => piano(m, t + 0.4 + i * 0.55, 0.35));
+    }
+
+    // right hand: 0–4 notes, mostly stepwise, lots of space
+    const notes = pick([0, 1, 2, 2, 3, 3, 4]);
+    let at = t + rand(1.2, 2.2);
+    const pool = [];
+    for (let m = 64; m <= 84; m++) if (inScale(m)) pool.push(m);
+    for (let i = 0; i < notes && at < t + dur - 1; i++) {
+      const near = pool.filter((m) => Math.abs(m - lastMel) <= 4 && m !== lastMel);
+      const chordy = near.filter((m) => chord.tones.some((c) => (c - m) % 12 === 0));
+      lastMel = pick(chordy.length && Math.random() < 0.65 ? chordy : near.length ? near : pool);
+      piano(lastMel, at, rand(0.5, 0.8), 1);
+      if (Math.random() < 0.15) piano(lastMel - 12, at + 0.01, 0.3);   // soft octave
+      at += pick([0.8, 1.1, 1.5, 2.0]);
+    }
+    later(bar, dur);
   }
 
   function later(fn, sec) { timers.push(setTimeout(() => playing && fn(), Math.max(0.2, sec) * 1000)); }
@@ -168,9 +141,10 @@
     const t = ctx.currentTime;
     master.gain.cancelScheduledValues(t);
     master.gain.setValueAtTime(master.gain.value, t);
-    master.gain.linearRampToValueAtTime(0.85, t + 3);
+    master.gain.linearRampToValueAtTime(0.9, t + 3);
     timers.forEach(clearTimeout); timers = [];
-    later(pad, 0.2); later(phrase, 2.5); later(bell, 6);
+    step = 0; prog = PROGRESSIONS[Math.floor(Math.random() * 2)];
+    later(bar, 0.2);
     setUI(true);
   }
 
