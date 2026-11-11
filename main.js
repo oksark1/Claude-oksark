@@ -57,6 +57,12 @@
     li.addEventListener("keydown", (e) => { if (e.key === "Enter") openProject(i); });
     list.appendChild(li);
   });
+  if ("IntersectionObserver" in window && !reduced) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -10% 0px" });
+    list.querySelectorAll(".work-item").forEach((el) => { el.classList.add("reveal"); io.observe(el); });
+  }
 
   /* ---------- Orbit ---------- */
   const stage = document.getElementById("stage");
