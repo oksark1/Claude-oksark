@@ -257,6 +257,17 @@ window.PROJECTS = [
     noPage: true, // no case page yet: the card is shown but not clickable
   },
   {
+    title: "Optriment",
+    category: "Web app",
+    year: 2025,
+    text: "Analytics dashboard for Optriment — camera-based visitor statistics by location, date and hour, with light and dark themes.",
+    tags: ["Dashboard", "B2B", "UI/UX"],
+    image: "assets/projects/optriment-cover.webp",
+    palette: ["#f1f1f1", "#111111"],
+    slug: "optriment",
+    noPage: true, // no case page yet: the card is shown but not clickable
+  },
+  {
     title: "Coffee brand identity",
     placeholder: true, // заглушка: не показывается в сетке работ
     category: "Branding",
