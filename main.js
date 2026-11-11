@@ -57,7 +57,6 @@
   let velocity = 0;
   let active = -1;
   let rx = 400, ry = 60, cardW = 240;
-  let pauseUntil = 0;
   let hovering = false;
   let speed = 1;          // auto-rotation speed multiplier
 
@@ -114,8 +113,7 @@
     const k = Math.round((angle - base) / (Math.PI * 2));
     return base + k * Math.PI * 2;
   }
-  function goTo(i) { target = angleFor(((i % n) + n) % n); velocity = 0; pauseUntil = performance.now() + 5000; }
-  function snap() { goTo(Math.round(-angle / step)); }
+  function goTo(i) { target = angleFor(((i % n) + n) % n); velocity = 0; }
 
   document.getElementById("prev").addEventListener("click", () => goTo(active - 1));
   document.getElementById("next").addEventListener("click", () => goTo(active + 1));
@@ -152,10 +150,9 @@
     if (!dragging) return;
     dragging = false;
     stage.classList.remove("dragging");
-    pauseUntil = performance.now() + 5000;
     if (!moved) return;
     setTimeout(() => (moved = false), 0);
-    if (Math.abs(velocity) < 0.004) snap();
+    speed = 0; // auto-rotation fades back in after the throw
   };
   window.addEventListener("pointerup", endDrag);
   window.addEventListener("pointercancel", endDrag);
@@ -172,18 +169,23 @@
     const dt = Math.min(48, now - prev) / 16.67;
     prev = now;
     if (!dragging) {
-      if (Math.abs(velocity) > 0.0005) {
-        angle += velocity * dt;
-        velocity *= Math.pow(0.93, dt);
-        if (Math.abs(velocity) <= 0.004) { velocity = 0; snap(); }
-      } else if (target !== null) {
+      if (target !== null) {
+        // arrows / clicks: glide to the chosen card, then keep slowly rotating
         const diff = target - angle;
         angle += diff * Math.min(1, 0.1 * dt);
-        if (Math.abs(diff) < 0.0005) { angle = target; target = null; }
-      } else if (!reduced && now > pauseUntil && !document.hidden) {
-        // ease the auto-rotation speed toward its target (slower while hovering a card)
-        speed += ((hovering ? 0.2 : 1) - speed) * Math.min(1, 0.06 * dt);
-        angle -= 0.0025 * speed * dt;
+        if (Math.abs(diff) < 0.002) { target = null; speed = 0; }
+      } else {
+        // momentum from a drag, decaying smoothly
+        if (velocity) {
+          angle += velocity * dt;
+          velocity *= Math.pow(0.95, dt);
+          if (Math.abs(velocity) < 0.0002) velocity = 0;
+        }
+        // slow auto-rotation never stops; slower while hovering a card
+        if (!reduced && !document.hidden) {
+          speed += ((hovering ? 0.2 : 1) - speed) * Math.min(1, 0.03 * dt);
+          angle -= 0.0025 * speed * dt;
+        }
       }
     }
     render();
