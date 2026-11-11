@@ -322,7 +322,7 @@ a.client-link:focus-visible { outline: 1px solid var(--text); outline-offset: 6p
 }
 @keyframes sway-b {
   0%, 100% { rotate: 0deg; }
-  50% { rotate: 4deg; }
+  50% { rotate: 2.5deg; }
 }
 @keyframes float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -331,6 +331,10 @@ a.client-link:focus-visible { outline: 1px solid var(--text); outline-offset: 6p
 /* parallax: layers move against the background (depth from data), bg drifts slightly the other way */
 .art.layered.parallax img.layer {
   translate: calc(var(--px, 0) * var(--depth) * -3cqw) calc(var(--py, 0) * var(--depth) * -3cqw);
+}
+/* layers cut off at the bottom edge never move up, so the cut stays hidden */
+.art.layered.parallax img.layer.no-lift {
+  translate: calc(var(--px, 0) * var(--depth) * -3cqw) max(0cqw, calc(var(--py, 0) * var(--depth) * -3cqw));
 }
 .art.layered.parallax img.bg {
   scale: 1.04;

@@ -16,6 +16,7 @@
     animatedCover — (необязательно) анимированная обложка: фон + слои, которые двигаются
                (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c | float в styles.css.
                bgColor — цвет фона вместо картинки bg; у слоя enter — откуда он выезжает при появлении.
+               noLift: true у слоя — параллакс не поднимает его (для слоёв, обрезанных снизу).
                parallax: true — слои смещаются от мыши и прокрутки (сила — depth у слоя).
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
@@ -223,7 +224,7 @@ window.PROJECTS = [
         { src: "assets/projects/okto/tentR.webp", x: 67.44, y: 25.56, w: 33.81, depth: 0.7,
           enter: "translate(-16cqw, 3cqw) rotate(-8deg)", enterDelay: 0.7, path: "sway", duration: 7, origin: "0% 80%" },
         { src: "assets/projects/okto/site.webp", x: 9.44, y: 5.44, w: 81.12 },
-        { src: "assets/projects/okto/leg.webp", x: 2.12, y: 75.81, w: 22.62, depth: 1.3,
+        { src: "assets/projects/okto/leg.webp", x: 2.12, y: 77.3, w: 22.62, depth: 1.3, noLift: true,
           enter: "translate(0, 30cqw)", enterDelay: 0.95, path: "sway-b", duration: 6, delay: -2, origin: "60% 100%" },
       ],
     },

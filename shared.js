@@ -57,7 +57,7 @@
     let entering = false;
     (a.layers || []).forEach((l) => {
       const img = document.createElement("img");
-      img.className = "layer" + (l.enter ? " enter" : ""); img.src = l.src; img.alt = ""; img.loading = "lazy"; img.draggable = false;
+      img.className = "layer" + (l.enter ? " enter" : "") + (l.noLift ? " no-lift" : ""); img.src = l.src; img.alt = ""; img.loading = "lazy"; img.draggable = false;
       img.setAttribute("aria-hidden", "true");
       img.style.cssText =
         `--x:${l.x}%;--y:${l.y}%;--w:${l.w}%;--anim:${l.path || "none"};--dur:${l.duration || 9}s;` +
