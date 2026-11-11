@@ -163,7 +163,13 @@
 
   function setUI(on) {
     btn.classList.toggle("on", on);
-    document.documentElement.classList.toggle("sound-on", on); // AirPods Max on the 3D model
+    const root = document.documentElement;
+    if (root.classList.contains("sound-on") !== on) {
+      // dark theme + night photo while the music plays; animate the switch
+      root.classList.add("theme-anim");
+      clearTimeout(setUI.t); setUI.t = setTimeout(() => root.classList.remove("theme-anim"), 1500);
+    }
+    root.classList.toggle("sound-on", on);
     btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
   }
