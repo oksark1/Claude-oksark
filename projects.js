@@ -153,7 +153,7 @@ window.PROJECTS = [
     year: 2025,
     text: "Packaging and key visual for Inflomega — an Omega-3 + B. megaterium + D3 supplement about the hidden effects of inflammation on the body.",
     tags: ["Packaging", "Key visual", "Art direction", "Health"],
-    image: "assets/projects/inflomega-cover.webp",
+    image: "assets/projects/inflomega-bottle.webp",
     palette: ["#0b0b0b", "#e8875c"],
     slug: "inflomega",
     intro: "Inflomega is a supplement with Omega-3, B. megaterium and vitamin D3. It speaks about inflammation — something people rarely see, but feel every day as headaches, joint pain or heart problems. The visual had to make this invisible process tangible and memorable.",
