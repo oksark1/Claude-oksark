@@ -373,7 +373,24 @@ html.landing .model { opacity: 1; transition: opacity .7s ease; }
 html.landing .stage { z-index: 950; }
 html.landing .hero { overflow: visible; }
 
-.loader-cards { position: absolute; inset: 0; }
+/* big name in the centre, flies into the header logo at the end */
+.loader-title { display: none; }
+html.is-loading .loader-title {
+  display: block;
+  position: fixed; left: 50%; top: 50%; z-index: 960;
+  transform: translate(-50%, -50%);
+  transform-origin: 0 0;
+  font-size: min(11vw, 150px);
+  line-height: 1.4; letter-spacing: 0.01em; font-weight: 400;
+  white-space: nowrap;
+  color: var(--text);
+  pointer-events: none;
+}
+html.is-loading .header .logo { visibility: hidden; }
+/* layers while loading: backdrop + counter (900) < name (960) < running cards (965) < cursor (1000) */
+.loader-cards { display: none; }
+html.is-loading .loader-cards { display: block; position: fixed; inset: 0; z-index: 965; pointer-events: none; }
+
 .loader-card {
   position: absolute; left: 0; top: 0;
   overflow: hidden;
