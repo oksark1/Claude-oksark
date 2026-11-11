@@ -22,96 +22,76 @@
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
-    <span class="status"><i></i>Available for projects</span>
   </header>
 
   <main id="top">
+    <!-- INTRO -->
+    <section class="intro cols">
+      <div>
+        <p>Daniil Krasko — Designer</p>
+        <p class="gap-top">↯ Product &amp; interfaces<br />© Brands &amp; web</p>
+      </div>
+      <h1>Designing clear, thoughtful digital products. 5+ years in design. 100+ projects delivered.</h1>
+    </section>
+
     <!-- HERO: 3D model with orbiting projects -->
     <section class="hero" aria-label="Featured projects">
-      <div class="hero-intro">
-        <p class="eyebrow">Designer — 5+ years</p>
-        <h1>Designing clear,<br /><em>thoughtful</em> digital products.</h1>
-      </div>
-
       <div class="stage" id="stage">
-        <img class="model" src="assets/daniil-3d.webp" alt="3D portrait of Daniil Krasko working at a desk" width="1200" height="1502" draggable="false" />
+        <img class="model" src="assets/daniil-3d.webp" alt="3D portrait of Daniil Krasko working at a desk" width="959" height="1200" draggable="false" />
         <div class="orbit" id="orbit"></div>
       </div>
-
       <div class="hero-bottom">
-        <div class="hero-stats">
-          <div><strong>5+</strong><span>years in design</span></div>
-          <div><strong>100+</strong><span>projects delivered</span></div>
-        </div>
-
-        <div class="carousel-ui">
-          <div class="caption" aria-live="polite">
-            <span class="caption-index" id="capIndex">01 / 08</span>
-            <span class="caption-title" id="capTitle"></span>
-            <span class="caption-cat" id="capCat"></span>
-          </div>
-          <div class="arrows">
-            <button class="arrow" id="prev" aria-label="Previous project">←</button>
-            <button class="arrow" id="next" aria-label="Next project">→</button>
-          </div>
+        <p class="caption" aria-live="polite">
+          <span id="capIndex">01 / 08</span>
+          <span id="capTitle"></span>
+          <span class="muted" id="capCat"></span>
+        </p>
+        <div class="arrows">
+          <button class="btn arrow" id="prev" aria-label="Previous project">←</button>
+          <button class="btn arrow" id="next" aria-label="Next project">→</button>
         </div>
       </div>
-      <p class="hint">Drag to explore</p>
     </section>
 
     <!-- WORK -->
     <section class="section" id="work">
-      <div class="section-head">
-        <h2>Selected work</h2>
-        <p>A few highlights from 100+ projects.</p>
-      </div>
       <ul class="work-list" id="workList"></ul>
     </section>
 
     <!-- ABOUT -->
-    <section class="section about" id="about">
-      <div class="section-head">
-        <h2>About</h2>
-      </div>
-      <div class="about-grid">
-        <p class="about-lead">
-          I'm Daniil — a designer with more than five years of experience and over a hundred
-          projects behind me. I help teams turn complex ideas into <em>simple, beautiful</em> interfaces
-          and brands people remember.
-        </p>
-        <div class="services">
-          <h3>Services</h3>
-          <ul>
-            <li>Product &amp; UI/UX design</li>
-            <li>Websites &amp; landing pages</li>
-            <li>Brand identity</li>
-            <li>Design systems</li>
-            <li>3D &amp; visual design</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section class="section contact" id="contact">
-      <p class="eyebrow">Have a project in mind?</p>
-      <a class="contact-big" href="https://t.me/oksark" target="_blank" rel="noopener">Let's work <em>together</em> →</a>
-      <ul class="socials">
-        <li><a href="https://t.me/oksark" target="_blank" rel="noopener">Telegram — @oksark</a></li>
+    <section class="section about cols" id="about">
+      <p>About</p>
+      <p>
+        I'm Daniil — a designer with more than five years of experience and over a hundred
+        projects behind me. I help teams turn complex ideas into simple, beautiful interfaces
+        and brands people remember.
+      </p>
+      <ul class="services">
+        <li>Product &amp; UI/UX design</li>
+        <li>Websites &amp; landing pages</li>
+        <li>Brand identity</li>
+        <li>Design systems</li>
+        <li>3D &amp; visual design</li>
       </ul>
     </section>
   </main>
 
-  <footer class="footer">
-    <span>© <span id="year"></span> Daniil Krasko</span>
-    <a href="#top">Back to top ↑</a>
+  <!-- CONTACT / FOOTER -->
+  <footer class="footer cols" id="contact">
+    <p><a class="ul" href="#top">Daniil Krasko</a><br />© <span id="year"></span></p>
+    <ul class="links">
+      <li>↘ <a class="ul" href="https://t.me/oksark" target="_blank" rel="noopener">Telegram</a></li>
+    </ul>
+    <div class="footer-cta">
+      <a class="btn" href="https://t.me/oksark" target="_blank" rel="noopener">Contact</a>
+    </div>
   </footer>
 
   <dialog class="modal" id="modal">
     <button class="modal-close" id="modalClose" aria-label="Close">×</button>
     <div class="modal-cover" id="modalCover"></div>
     <div class="modal-body">
-      <p class="eyebrow" id="modalMeta"></p>
+      <p class="muted" id="modalMeta"></p>
       <h3 id="modalTitle"></h3>
       <p id="modalText"></p>
       <ul class="tags" id="modalTags"></ul>

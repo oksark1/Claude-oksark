@@ -100,11 +100,11 @@
     const h = stage.clientHeight;
     const mH = model.getBoundingClientRect().height || h * 0.6;
     const mobile = w < 860;
-    cardW = mobile ? Math.max(104, Math.min(150, w * 0.3)) : Math.min(240, Math.max(170, w * 0.145));
+    cardW = mobile ? Math.max(92, Math.min(130, w * 0.26)) : Math.min(210, Math.max(150, w * 0.13));
     rx = mobile ? w * 0.38 : Math.min(w * 0.34, mH * 0.85 + cardW * 0.3);
     ry = mH * (mobile ? 0.26 : 0.2);
     orbit.style.setProperty("--card-w", cardW + "px");
-    cards.forEach((c) => c.style.setProperty("--h", cardW * 0.75 + "px"));
+    cards.forEach((c) => c.style.setProperty("--h", cardW + "px"));
   }
 
   const caption = {
