@@ -209,6 +209,30 @@ html.theme-anim .model-night { transition: opacity 1.4s cubic-bezier(.4, 0, .2, 
 .work-item.reveal.in .thumb { opacity: 1; transform: none; }
 
 
+/* ---------- Working with ---------- */
+.section-label { text-transform: uppercase; padding-bottom: var(--gap); }
+.client-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+}
+.client-link { display: block; }
+.client-logo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #efefef;            /* stays light in both themes so every logo reads well */
+  overflow: hidden;
+}
+.client-logo img {
+  position: absolute; inset: 0; margin: auto;
+  height: 46%; width: 60%; object-fit: contain;
+  transition: transform .6s cubic-bezier(.2,.8,.2,1);
+}
+a.client-link:hover .client-logo img { transform: scale(1.06); }
+.client-meta { display: flex; justify-content: space-between; gap: 16px; padding: 15px 0; }
+a.client-link:hover .client-meta span:first-child { text-decoration: underline; text-underline-offset: 3px; }
+a.client-link:focus-visible { outline: 1px solid var(--text); outline-offset: 6px; }
+
 .about { text-transform: none; }
 .about > p:first-child { text-transform: uppercase; }
 .about > p:nth-child(2) { max-width: 443px; }
@@ -461,6 +485,7 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
   .hero { margin-top: 32px; height: min(560px, 74svh); }
   .model { height: 62%; }
   .work-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .client-list { grid-template-columns: 1fr; }
   .section { padding-top: 72px; }
   .footer.cols { grid-template-columns: 1fr 1fr; row-gap: 32px; }
   .footer-cta { grid-column: 1 / -1; justify-self: start; }
