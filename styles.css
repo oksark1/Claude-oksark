@@ -62,7 +62,25 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
   padding: 0 var(--pad);
   background: var(--bg);
 }
-.nav { display: flex; gap: 39px; }
+.nav { display: flex; align-items: center; gap: 39px; }
+
+/* sound toggle: three bars, animated while playing */
+.sound {
+  display: inline-flex; align-items: flex-end; gap: 2px;
+  width: 18px; height: 14px; padding: 0; margin-left: -6px;
+  border: 0; background: none; cursor: pointer;
+}
+.sound i { display: block; width: 2px; height: 3px; background: currentColor; transition: height .3s; }
+.sound i:nth-child(1) { height: 5px; }
+.sound i:nth-child(2) { height: 10px; }
+.sound i:nth-child(3) { height: 7px; }
+.sound:not(.on) { opacity: .45; }
+.sound:hover { opacity: 1; }
+.sound.on i { animation: eq 1.1s ease-in-out infinite; }
+.sound.on i:nth-child(2) { animation-delay: -.4s; animation-duration: .9s; }
+.sound.on i:nth-child(3) { animation-delay: -.7s; animation-duration: 1.3s; }
+@keyframes eq { 0%, 100% { height: 3px; } 50% { height: 14px; } }
+.sound:focus-visible { outline: 1px solid var(--text); outline-offset: 4px; }
 
 /* ---------- Intro ---------- */
 .intro { padding: 116px var(--pad) 0; text-transform: uppercase; }
@@ -362,5 +380,6 @@ html.has-cursor, html.has-cursor * { cursor: none !important; }
   html { scroll-behavior: auto; }
   .work-item.reveal .thumb { opacity: 1; transform: none; transition: none; }
   .art.layered img.layer { animation: none; }
+  .sound.on i { animation: none; height: 10px; }
   .art.layered img.layer.enter { transform: none; transition: none; }
 }
