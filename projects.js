@@ -17,6 +17,7 @@
                (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c в styles.css.
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
+    placeholder — (необязательно) true: проект-заглушка, скрыт из сетки работ.
     external — (необязательно) true: по клику на карточку открывается сайт из link
                в новой вкладке, а не страница кейса.
     link     — (необязательно) ссылка на живой сайт, Behance и т.п.
@@ -198,6 +199,7 @@ window.PROJECTS = [
   },
   {
     title: "Coffee brand identity",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "Branding",
     year: 2025,
     text: "Placeholder — logo, packaging and visual language for a specialty coffee brand.",
@@ -207,6 +209,7 @@ window.PROJECTS = [
   },
   {
     title: "SaaS dashboard",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "Web app",
     year: 2024,
     text: "Placeholder — analytics dashboard with a focus on clarity and dense data.",
@@ -216,6 +219,7 @@ window.PROJECTS = [
   },
   {
     title: "Architecture studio site",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "Website",
     year: 2024,
     text: "Placeholder — minimal portfolio website for an architecture studio.",
@@ -225,6 +229,7 @@ window.PROJECTS = [
   },
   {
     title: "Music festival",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "Visual identity",
     year: 2024,
     text: "Placeholder — posters, social media and merch for a summer festival.",
@@ -234,6 +239,7 @@ window.PROJECTS = [
   },
   {
     title: "E-commerce redesign",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "UX / UI",
     year: 2023,
     text: "Placeholder — new catalogue, product page and checkout for an online store.",
@@ -243,6 +249,7 @@ window.PROJECTS = [
   },
   {
     title: "Health tracker",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "Product design",
     year: 2023,
     text: "Placeholder — habit and health tracking app with calm, friendly visuals.",
@@ -252,6 +259,7 @@ window.PROJECTS = [
   },
   {
     title: "Tech conference",
+    placeholder: true, // заглушка: не показывается в сетке работ
     category: "Branding & web",
     year: 2022,
     text: "Placeholder — identity and website for an annual tech conference.",

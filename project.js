@@ -81,7 +81,10 @@
   });
 
   /* next project */
-  const next = projects[(i + 1) % projects.length];
+  // next real project (placeholders are skipped)
+  const real = projects.filter((x) => !x.placeholder);
+  const ri = real.indexOf(p);
+  const next = real.length ? real[(ri + 1) % real.length] : projects[(i + 1) % projects.length];
   const nav = document.getElementById("caseNext");
   nav.append(el("p", "muted", "Next project"));
   const a = el("a", "next-link");

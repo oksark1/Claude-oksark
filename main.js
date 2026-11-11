@@ -16,7 +16,7 @@
 
   /* ---------- Work list ---------- */
   const list = document.getElementById("workList");
-  projects.forEach((p, i) => {
+  projects.filter((p) => !p.placeholder).forEach((p) => {
     const li = document.createElement("li");
     li.className = "work-item";
     const a = document.createElement("a");
