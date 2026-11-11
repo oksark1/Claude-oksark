@@ -147,10 +147,15 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 .work-item .name { padding: 15px 0; }
 .work-item:hover .name { text-decoration: underline; text-underline-offset: 3px; }
 .work-item:focus-visible { outline: 1px solid var(--text); outline-offset: 6px; }
-/* reveal on scroll */
-.work-item.reveal .thumb, .work-item.reveal .name { opacity: 0; transition: opacity .6s cubic-bezier(.4,0,.2,1); }
-.work-item.reveal .name { transition-delay: .25s; }
-.work-item.reveal.in .thumb, .work-item.reveal.in .name { opacity: 1; }
+/* reveal on scroll — matches the reference: image fades in and rises 25px,
+   0.8s ease, cards in a row start ~65ms apart; captions stay visible */
+.work-item.reveal .thumb {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity .8s cubic-bezier(.4,0,.2,1), transform .8s cubic-bezier(.4,0,.2,1);
+  transition-delay: var(--d, 0ms);
+}
+.work-item.reveal.in .thumb { opacity: 1; transform: none; }
 
 
 .about { text-transform: none; }
@@ -257,5 +262,5 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .work-item.reveal .thumb, .work-item.reveal .name { opacity: 1; transition: none; }
+  .work-item.reveal .thumb { opacity: 1; transform: none; transition: none; }
 }

@@ -26,8 +26,15 @@
   });
   if ("IntersectionObserver" in window && !reduced) {
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -10% 0px" });
+      // items entering together (one row) start one after another
+      entries.filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+        .forEach((e, k) => {
+          e.target.style.setProperty("--d", k * 65 + "ms");
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        });
+    }, { rootMargin: "0px 0px -8% 0px" });
     list.querySelectorAll(".work-item").forEach((el) => { el.classList.add("reveal"); io.observe(el); });
   }
 
