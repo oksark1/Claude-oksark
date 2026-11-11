@@ -4,7 +4,7 @@
 
 ## Как редактировать
 - **Проекты** — `projects.js`: название, категория, год, описание, теги. Чтобы поставить реальную обложку, положите картинку в `assets/projects/` и укажите `image: "assets/projects/имя.jpg"`.
-- **Контакты** — в `index.html` замените `hello@example.com` и ссылки `#` у Telegram/Behance/Dribbble/LinkedIn.
+- **Контакты** — блок `#contact` в `index.html` (сейчас Telegram: t.me/oksark).
 - **Тексты** — заголовок, «About» и услуги в `index.html`.
 - **Цвета и шрифты** — переменные в начале `styles.css`.
 
