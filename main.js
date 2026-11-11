@@ -5,56 +5,21 @@
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const pad = (i) => String(i + 1).padStart(2, "0");
 
-  /* ---------- Cover art ---------- */
-  function cover(p) {
-    const el = document.createElement("div");
-    el.className = "art " + (p.image ? "" : p.shape || "circle");
-    el.style.setProperty("--a", (p.palette && p.palette[0]) || "#ddd");
-    el.style.setProperty("--b", (p.palette && p.palette[1]) || "#111");
-    if (p.image) {
-      const img = document.createElement("img");
-      img.src = p.image;
-      img.alt = p.title;
-      img.loading = "lazy";
-      img.draggable = false;
-      el.appendChild(img);
-    }
-    return el;
-  }
-
-  /* ---------- Modal ---------- */
-  const modal = document.getElementById("modal");
-  function openProject(i) {
-    const p = projects[i];
-    const c = document.getElementById("modalCover");
-    c.replaceChildren(cover(p));
-    document.getElementById("modalMeta").textContent = `${p.category} · ${p.year}`;
-    document.getElementById("modalTitle").textContent = p.title;
-    document.getElementById("modalText").textContent = p.text || "";
-    const tags = document.getElementById("modalTags");
-    tags.replaceChildren(...(p.tags || []).map((t) => Object.assign(document.createElement("li"), { textContent: t })));
-    if (p.link) {
-      const li = document.createElement("li");
-      li.innerHTML = `<a href="${p.link}" target="_blank" rel="noopener">View case →</a>`;
-      tags.appendChild(li);
-    }
-    modal.showModal();
-  }
-  document.getElementById("modalClose").addEventListener("click", () => modal.close());
-  modal.addEventListener("click", (e) => { if (e.target === modal) modal.close(); });
+  const { cover, projectUrl } = window.Site;
+  const openProject = (i) => { window.location.href = projectUrl(projects[i]); };
 
   /* ---------- Work list ---------- */
   const list = document.getElementById("workList");
   projects.forEach((p, i) => {
     const li = document.createElement("li");
     li.className = "work-item";
-    li.tabIndex = 0;
-    li.setAttribute("aria-label", `${p.title} — ${p.category}, ${p.year}`);
-    li.innerHTML = `<div class="thumb"></div><h3 class="name"></h3>`;
-    li.querySelector(".name").textContent = p.title;
-    li.querySelector(".thumb").appendChild(cover(p));
-    li.addEventListener("click", () => openProject(i));
-    li.addEventListener("keydown", (e) => { if (e.key === "Enter") openProject(i); });
+    const a = document.createElement("a");
+    a.href = projectUrl(p);
+    a.setAttribute("aria-label", `${p.title} — ${p.category}, ${p.year}`);
+    a.innerHTML = `<div class="thumb"></div><h3 class="name"></h3>`;
+    a.querySelector(".name").textContent = p.title;
+    a.querySelector(".thumb").appendChild(cover(p));
+    li.appendChild(a);
     list.appendChild(li);
   });
   if ("IntersectionObserver" in window && !reduced) {
@@ -154,7 +119,7 @@
   document.getElementById("prev").addEventListener("click", () => goTo(active - 1));
   document.getElementById("next").addEventListener("click", () => goTo(active + 1));
   window.addEventListener("keydown", (e) => {
-    if (modal.open || window.scrollY > window.innerHeight * 0.6) return;
+    if (window.scrollY > window.innerHeight * 0.6) return;
     if (e.key === "ArrowLeft") goTo(active - 1);
     if (e.key === "ArrowRight") goTo(active + 1);
   });
@@ -223,5 +188,4 @@
   window.addEventListener("resize", layout);
   if (model.complete) start(); else model.addEventListener("load", start, { once: true });
 
-  document.getElementById("year").textContent = new Date().getFullYear();
 })();
