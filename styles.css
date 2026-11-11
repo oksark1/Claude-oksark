@@ -6,8 +6,8 @@
   --line: rgba(18, 18, 18, 0.1);
   --accent: #b8913a;
   --radius: 18px;
-  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --serif: "Instrument Serif", Georgia, serif;
+  --sans: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --serif: "IBM Plex Mono", ui-monospace, monospace;
   --pad: clamp(16px, 4vw, 48px);
 }
 
@@ -67,15 +67,15 @@ button { font: inherit; color: inherit; }
   flex-direction: column;
   overflow: hidden;
 }
-.hero-intro { position: relative; z-index: 30; max-width: 520px; pointer-events: none; }
+.hero-intro { position: relative; z-index: 30; max-width: 660px; pointer-events: none; }
 .hero h1 {
   margin: 0;
-  font-size: clamp(30px, 4.2vw, 56px);
+  font-size: clamp(26px, 3.6vw, 50px);
   line-height: 1.02;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   font-weight: 500;
 }
-.hero h1 em { font-size: 1.08em; letter-spacing: -0.01em; }
+.hero h1 em { letter-spacing: -0.04em; }
 
 .stage {
   position: absolute;
@@ -119,7 +119,8 @@ button { font: inherit; color: inherit; }
 .card .label {
   position: absolute; left: 10px; bottom: 10px;
   padding: 5px 10px; border-radius: 99px;
-  font-size: 12px; font-weight: 500;
+  font-size: 11px; font-weight: 500;
+  max-width: calc(100% - 20px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   background: rgba(255,255,255,.88); color: var(--text);
   backdrop-filter: blur(6px);
   opacity: 0; transform: translateY(4px);
@@ -165,7 +166,7 @@ button { font: inherit; color: inherit; }
 /* ---------- Sections ---------- */
 .section { padding: clamp(80px, 12vw, 160px) var(--pad) 0; }
 .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
-.section-head h2 { margin: 0; font-size: clamp(28px, 4vw, 48px); font-weight: 500; letter-spacing: -0.035em; }
+.section-head h2 { margin: 0; font-size: clamp(28px, 4vw, 48px); font-weight: 500; letter-spacing: -0.04em; }
 .section-head p { margin: 0; color: var(--muted); font-size: 14px; }
 
 .work-list { list-style: none; margin: 0; padding: 0; }
@@ -197,7 +198,7 @@ button { font: inherit; color: inherit; }
 .contact { text-align: center; padding-bottom: 120px; }
 .contact-big {
   display: inline-block;
-  font-size: clamp(40px, 8vw, 120px);
+  font-size: clamp(32px, 6.4vw, 96px);
   line-height: 1;
   letter-spacing: -0.05em;
   font-weight: 500;
