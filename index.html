@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Daniil Krasko — Designer</title>
+  <meta name="description" content="Daniil Krasko — designer with 5+ years of experience and 100+ projects." />
+  <meta property="og:title" content="Daniil Krasko — Designer" />
+  <meta property="og:description" content="5+ years, 100+ projects. Product, brand and web design." />
+  <meta property="og:image" content="assets/daniil-3d.webp" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Ctext x='16' y='21.5' font-family='Arial' font-weight='700' font-size='14' fill='%23fff' text-anchor='middle'%3EDK%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <a href="#top" class="logo">Daniil Krasko</a>
+    <nav class="nav">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <span class="status"><i></i>Available for projects</span>
+  </header>
+
+  <main id="top">
+    <!-- HERO: 3D model with orbiting projects -->
+    <section class="hero" aria-label="Featured projects">
+      <div class="hero-intro">
+        <p class="eyebrow">Designer — 5+ years</p>
+        <h1>Designing clear,<br /><em>thoughtful</em> digital products.</h1>
+      </div>
+
+      <div class="stage" id="stage">
+        <img class="model" src="assets/daniil-3d.webp" alt="3D portrait of Daniil Krasko working at a desk" width="1200" height="1502" draggable="false" />
+        <div class="orbit" id="orbit"></div>
+      </div>
+
+      <div class="hero-bottom">
+        <div class="hero-stats">
+          <div><strong>5+</strong><span>years in design</span></div>
+          <div><strong>100+</strong><span>projects delivered</span></div>
+        </div>
+
+        <div class="carousel-ui">
+          <div class="caption" aria-live="polite">
+            <span class="caption-index" id="capIndex">01 / 08</span>
+            <span class="caption-title" id="capTitle"></span>
+            <span class="caption-cat" id="capCat"></span>
+          </div>
+          <div class="arrows">
+            <button class="arrow" id="prev" aria-label="Previous project">←</button>
+            <button class="arrow" id="next" aria-label="Next project">→</button>
+          </div>
+        </div>
+      </div>
+      <p class="hint">Drag to explore</p>
+    </section>
+
+    <!-- WORK -->
+    <section class="section" id="work">
+      <div class="section-head">
+        <h2>Selected work</h2>
+        <p>A few highlights from 100+ projects.</p>
+      </div>
+      <ul class="work-list" id="workList"></ul>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+      <div class="section-head">
+        <h2>About</h2>
+      </div>
+      <div class="about-grid">
+        <p class="about-lead">
+          I'm Daniil — a designer with more than five years of experience and over a hundred
+          projects behind me. I help teams turn complex ideas into <em>simple, beautiful</em> interfaces
+          and brands people remember.
+        </p>
+        <div class="services">
+          <h3>Services</h3>
+          <ul>
+            <li>Product &amp; UI/UX design</li>
+            <li>Websites &amp; landing pages</li>
+            <li>Brand identity</li>
+            <li>Design systems</li>
+            <li>3D &amp; visual design</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <p class="eyebrow">Have a project in mind?</p>
+      <!-- TODO: replace with your real email -->
+      <a class="contact-big" href="mailto:hello@example.com">Let's work <em>together</em> →</a>
+      <ul class="socials">
+        <!-- TODO: replace # with your real profile links -->
+        <li><a href="#">Telegram</a></li>
+        <li><a href="#">Behance</a></li>
+        <li><a href="#">Dribbble</a></li>
+        <li><a href="#">LinkedIn</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> Daniil Krasko</span>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
+  <dialog class="modal" id="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    <div class="modal-cover" id="modalCover"></div>
+    <div class="modal-body">
+      <p class="eyebrow" id="modalMeta"></p>
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
+      <ul class="tags" id="modalTags"></ul>
+    </div>
+  </dialog>
+
+  <script src="projects.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
