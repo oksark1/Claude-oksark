@@ -231,6 +231,18 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
   45% { transform: translate(-2cqw, -9cqw); }
   72% { transform: translate(3cqw, -2cqw); }
 }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-1.6cqw) rotate(1.2deg); }
+}
+/* parallax: layers move against the background (depth from data), bg drifts slightly the other way */
+.art.layered.parallax img.layer {
+  translate: calc(var(--px, 0) * var(--depth) * -3cqw) calc(var(--py, 0) * var(--depth) * -3cqw);
+}
+.art.layered.parallax img.bg {
+  scale: 1.04;
+  translate: calc(var(--px, 0) * 0.8cqw) calc(var(--py, 0) * 0.8cqw);
+}
 .case-cover.is-layered { position: relative; width: min(100%, 88svh); aspect-ratio: 1 / 1; margin-left: auto; margin-right: auto; }
 
 /* ---------- Project page (long-read) ---------- */

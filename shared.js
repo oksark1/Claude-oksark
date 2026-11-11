@@ -45,7 +45,7 @@
   function layeredCover(p) {
     const a = p.animatedCover;
     const el = document.createElement("div");
-    el.className = "art layered";
+    el.className = "art layered" + (a.parallax ? " parallax" : "");
     const bg = document.createElement("img");
     bg.className = "bg"; bg.src = a.bg; bg.alt = p.title; bg.loading = "lazy"; bg.draggable = false;
     el.appendChild(bg);
@@ -53,7 +53,7 @@
       const img = document.createElement("img");
       img.className = "layer"; img.src = l.src; img.alt = ""; img.loading = "lazy"; img.draggable = false;
       img.setAttribute("aria-hidden", "true");
-      img.style.cssText = `--x:${l.x}%;--y:${l.y}%;--w:${l.w}%;--anim:${l.path};--dur:${l.duration || 9}s;--delay:${l.delay || 0}s`;
+      img.style.cssText = `--x:${l.x}%;--y:${l.y}%;--w:${l.w}%;--anim:${l.path};--dur:${l.duration || 9}s;--delay:${l.delay || 0}s;--depth:${l.depth || 0}`;
       el.appendChild(img);
     });
     return el;
@@ -61,6 +61,32 @@
 
   // projects with `external: true` open their live site (p.link) in a new tab instead of a case page
   const isExternal = (p) => !!(p.external && p.link);
+  /* Parallax for layered covers marked `parallax`: layers follow the pointer and scroll position */
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion) {
+    let mx = null, my = null;
+    window.addEventListener("pointermove", (e) => { if (e.pointerType === "mouse") { mx = e.clientX; my = e.clientY; } }, { passive: true });
+    const clamp = (v) => Math.max(-1, Math.min(1, v));
+    const tick = () => {
+      const vh = window.innerHeight;
+      document.querySelectorAll(".art.layered.parallax").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh || !r.width) return;
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const scroll = clamp((cy - vh / 2) / vh);
+        const px = mx === null ? 0 : clamp((mx - cx) / r.width);
+        const py = my === null ? 0 : clamp((my - cy) / r.height);
+        const tx = px, ty = clamp(py * 0.6 + scroll);
+        const s = el._p || (el._p = { x: 0, y: 0 });
+        s.x += (tx - s.x) * 0.08; s.y += (ty - s.y) * 0.08;
+        el.style.setProperty("--px", s.x.toFixed(4));
+        el.style.setProperty("--py", s.y.toFixed(4));
+      });
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+
   const projectUrl = (p) => (isExternal(p) ? p.link : `project.html?p=${encodeURIComponent(p.slug)}`);
   const linkTo = (a, p) => {
     a.href = projectUrl(p);

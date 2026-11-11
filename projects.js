@@ -14,7 +14,8 @@
     palette  — [фон, акцент] для автоматической обложки
     shape    — "circle" | "stripes" | "grid" | "phone" | "type" | "arch"
     animatedCover — (необязательно) анимированная обложка: фон + слои, которые двигаются
-               (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c в styles.css.
+               (пример — UTXO Alliance). Пути движения: cursor-a | cursor-b | cursor-c | float в styles.css.
+               parallax: true — слои смещаются от мыши и прокрутки (сила — depth у слоя).
     hero     — (необязательно) широкая картинка вверху страницы проекта.
                Если не указана, используется image.
     placeholder — (необязательно) true: проект-заглушка, скрыт из сетки работ.
@@ -154,6 +155,14 @@ window.PROJECTS = [
     text: "Packaging and key visual for Inflomega — an Omega-3 + B. megaterium + D3 supplement about the hidden effects of inflammation on the body.",
     tags: ["Packaging", "Key visual", "Art direction", "Health"],
     image: "assets/projects/inflomega-bottle.webp",
+    // parallax cover: the bottle is a separate layer that floats and moves more than the background
+    animatedCover: {
+      bg: "assets/projects/inflomega/bg.webp",
+      parallax: true,
+      layers: [
+        { src: "assets/projects/inflomega/bottle.webp", x: 31.45, y: 4.95, w: 35.5, path: "float", duration: 6, depth: 1 },
+      ],
+    },
     palette: ["#0b0b0b", "#e8875c"],
     slug: "inflomega",
     intro: "Inflomega is a supplement with Omega-3, B. megaterium and vitamin D3. It speaks about inflammation — something people rarely see, but feel every day as headaches, joint pain or heart problems. The visual had to make this invisible process tangible and memorable.",
