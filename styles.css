@@ -110,11 +110,19 @@ button { font: inherit; color: inherit; letter-spacing: inherit; }
   left: 50%;
   top: 46%;
   height: 78%;
-  width: auto;
+  aspect-ratio: 959 / 1200;
   transform: translate(-50%, -50%);
   z-index: 10;
   pointer-events: none;
 }
+.model-img { display: block; width: 100%; height: 100%; }
+/* AirPods Max: fade in while the music plays */
+.headphones {
+  position: absolute; height: auto;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(.4, 0, .2, 1);
+}
+html.sound-on .headphones { opacity: 1; transition-duration: 1.8s; }
 .orbit { position: absolute; left: 50%; top: 46%; width: 0; height: 0; }
 
 .card {

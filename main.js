@@ -204,6 +204,7 @@
 
   const start = () => { layout(); render(); requestAnimationFrame(tick); };
   window.addEventListener("resize", layout);
-  if (model.complete) start(); else model.addEventListener("load", start, { once: true });
+  const modelImg = model.querySelector(".model-img");
+  if (modelImg.complete) start(); else modelImg.addEventListener("load", start, { once: true });
 
 })();

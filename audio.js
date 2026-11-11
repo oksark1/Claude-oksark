@@ -189,6 +189,7 @@
 
   function setUI(on) {
     btn.classList.toggle("on", on);
+    document.documentElement.classList.toggle("sound-on", on); // AirPods Max on the 3D model
     btn.setAttribute("aria-pressed", String(on));
     btn.setAttribute("aria-label", on ? "Turn sound off" : "Turn sound on");
   }
