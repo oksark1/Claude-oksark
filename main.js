@@ -50,7 +50,7 @@
     const b = document.createElement("button");
     b.className = "card";
     b.setAttribute("aria-label", `${p.title} — ${p.category}`);
-    const c = cover(p);
+    const c = cover(p, p.image || null); // static cover in the hero carousel (no animated layers)
     c.classList.add("cover");
     b.append(c);
     b.addEventListener("click", (e) => {

@@ -103,6 +103,31 @@
     requestAnimationFrame(tick);
   }
 
+  /* Slow, smooth wheel scrolling (desktop mouse wheel / trackpad). Touch and keyboard keep native scrolling. */
+  if (!reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    const EASE = 0.075;     // lower = slower, longer glide
+    const SPEED = 0.85;     // wheel distance multiplier
+    let target = window.scrollY, current = window.scrollY, running = false;
+    const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
+    const loop = () => {
+      current += (target - current) * EASE;
+      if (Math.abs(target - current) < 0.5) { current = target; running = false; }
+      window.scrollTo({ top: current, behavior: "instant" });
+      if (running) requestAnimationFrame(loop);
+    };
+    window.addEventListener("wheel", (e) => {
+      if (e.ctrlKey || e.defaultPrevented) return;                        // pinch-zoom
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;                 // horizontal gestures
+      e.preventDefault();
+      if (!running) { target = current = window.scrollY; }
+      const unit = e.deltaMode === 1 ? 32 : e.deltaMode === 2 ? window.innerHeight : 1;
+      target = Math.max(0, Math.min(maxScroll(), target + e.deltaY * unit * SPEED));
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    }, { passive: false });
+    // any other scroll (anchors, keyboard, scrollbar) resets the glide
+    window.addEventListener("scroll", () => { if (!running) target = current = window.scrollY; }, { passive: true });
+  }
+
   // projects with `external: true` open their live site (p.link) in a new tab instead of a case page
   const isExternal = (p) => !!(p.external && p.link);
   const projectUrl = (p) => (isExternal(p) ? p.link : `project.html?p=${encodeURIComponent(p.slug)}`);
