@@ -365,7 +365,13 @@ html.is-loading .loader {
 }
 .loader.done::before { opacity: 0; }
 .loader.gone { opacity: 0; transition: opacity .5s ease; }
-html.is-loading #orbit .card { visibility: hidden; }
+html.is-loading:not(.landing) #orbit .card { visibility: hidden; }
+/* landing: the hero stage (model + real cards) rises above the loader backdrop,
+   so the cards are visible from their very first frame and keep their depth order */
+html.is-loading .model { opacity: 0; }
+html.landing .model { opacity: 1; transition: opacity .7s ease; }
+html.landing .stage { z-index: 950; }
+html.landing .hero { overflow: visible; }
 
 .loader-cards { position: absolute; inset: 0; }
 .loader-card {

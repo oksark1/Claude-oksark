@@ -109,28 +109,19 @@
   function finish() {
     flying = true;
     removeEventListener("pointermove", onMove);
-    const targets = [...document.querySelectorAll("#orbit .card")];
     const sz = size();
     loader.classList.add("done");
-    cards.forEach((c, i) => {
-      const t = targets[i];
-      if (!t) { c.el.style.opacity = "0"; return; }
-      const r = t.getBoundingClientRect();
-      const op = getComputedStyle(t).opacity;
-      c.el.style.transition =
-        `transform .85s cubic-bezier(.7,0,.2,1) ${i * 35}ms, opacity .5s ease ${i * 35 + 350}ms`;
-      c.el.style.transform = `translate3d(${r.left}px, ${r.top}px, 0) scale(${(r.width / sz).toFixed(4)})`;
-      c.el.style.transformOrigin = "0 0";
-      c.el.style.setProperty("--to-opacity", op);
-      c.el.classList.add("to-orbit");
-    });
-    // when the cards land, hand over to the real carousel
+    // hand the cards over to the real carousel: it flies its own cards from these positions
+    const points = cards.map((c) => ({ x: c.x, y: c.y, size: sz * c.s }));
+    const total = window.Orbit ? window.Orbit.land(points) : 0;
+    root.classList.add("landing");               // real cards become visible
+    cards.forEach((c) => (c.el.style.opacity = "0"));
     setTimeout(() => {
-      root.classList.remove("is-loading");
+      root.classList.remove("is-loading", "landing");
       unblock();
       loader.classList.add("gone");
       setTimeout(() => loader.remove(), 700);
-    }, 850 + featured.length * 35);
+    }, total);
   }
 
   // safety net: never block the page for more than 6s

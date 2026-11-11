@@ -97,8 +97,29 @@
     caption.cat.textContent = `${featured[i].category} · ${featured[i].year}`;
   }
 
+  /* Landing from the intro loader: real cards start where the loader cards are and glide
+     to their orbit slots. They keep their own z-index, so cards meant to be behind the model
+     travel behind it the whole way. */
+  let landing = null;
+  const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  window.Orbit = {
+    land(points, duration = 950, stagger = 40) {
+      const o = orbit.getBoundingClientRect();
+      landing = {
+        t0: performance.now(), duration, stagger,
+        items: cards.map((c, i) => {
+          const p = points[i];
+          if (!p || c._x === undefined) return null;
+          return { dx: p.x - (o.left + c._x), dy: p.y - (o.top + c._y), k: p.size / (cardW * c._scale) };
+        }),
+      };
+      return duration + stagger * cards.length;
+    },
+  };
+
   function render() {
     let best = -2, bestI = 0;
+    const now = performance.now();
     for (let i = 0; i < n; i++) {
       const t = angle + i * step;
       const s = Math.sin(t), z = Math.cos(t); // z: 1 = front, -1 = back
@@ -107,11 +128,20 @@
       const y = z * ry - ry * 0.35;
       const scale = 0.55 + 0.45 * depth;
       const c = cards[i];
-      c.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${scale.toFixed(3)}) rotateY(${(-s * 18).toFixed(1)}deg)`;
+      c._x = x; c._y = y; c._scale = scale;
+      let px = x, py = y, sc = scale, land = 1;
+      const L = landing && landing.items[i];
+      if (L) {
+        land = easeInOut(Math.max(0, Math.min(1, (now - landing.t0 - i * landing.stagger) / landing.duration)));
+        px = x + L.dx * (1 - land); py = y + L.dy * (1 - land);
+        sc = scale * (L.k + (1 - L.k) * land);
+      }
+      c.style.transform = `translate3d(${px.toFixed(1)}px, ${py.toFixed(1)}px, 0) scale(${sc.toFixed(3)}) rotateY(${(-s * 18 * land).toFixed(1)}deg)`;
       // passing beside the model (z ≈ 0) the card fades out, so the swap behind/in front is invisible
       const side = Math.min(1, Math.abs(z) / 0.32);
       const fade = 0.08 + 0.92 * side * side * (3 - 2 * side);     // smoothstep
-      c.style.opacity = ((0.35 + 0.65 * depth) * fade).toFixed(3);
+      const restOpacity = (0.35 + 0.65 * depth) * fade;
+      c.style.opacity = (L ? 1 + (restOpacity - 1) * land : restOpacity).toFixed(3);
       const blur = (depth < 0.45 ? (0.45 - depth) * 5 : 0) + (1 - side) * 2.5;
       c.style.filter = blur > 0.05 ? `blur(${blur.toFixed(1)}px)` : "none";
       // behind the model when on the far side of the orbit
@@ -119,6 +149,7 @@
       if (z > best) { best = z; bestI = i; }
     }
     setActive(bestI);
+    if (landing && now - landing.t0 > landing.duration + landing.stagger * n + 50) landing = null;
   }
 
   // nearest angle at which card i sits in front
