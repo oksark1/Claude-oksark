@@ -1,12 +1,14 @@
 (() => {
-  const projects = window.PROJECTS || [];
-  const n = projects.length;
+  const projects = window.PROJECTS || [];          // all projects → work grid
+  const HERO_LIMIT = 9;                              // max cards orbiting in the hero
+  const featured = projects.slice(0, HERO_LIMIT);    // first 9 in projects.js
+  const n = featured.length;
   const step = (Math.PI * 2) / n;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const pad = (i) => String(i + 1).padStart(2, "0");
 
   const { cover, projectUrl } = window.Site;
-  const openProject = (i) => { window.location.href = projectUrl(projects[i]); };
+  const openProject = (i) => { window.location.href = projectUrl(featured[i]); };
 
   /* ---------- Work list ---------- */
   const list = document.getElementById("workList");
@@ -33,7 +35,7 @@
   const stage = document.getElementById("stage");
   const orbit = document.getElementById("orbit");
   const model = stage.querySelector(".model");
-  const cards = projects.map((p, i) => {
+  const cards = featured.map((p, i) => {
     const b = document.createElement("button");
     b.className = "card";
     b.setAttribute("aria-label", `${p.title} — ${p.category}`);
@@ -80,8 +82,8 @@
     active = i;
     cards[i].classList.add("active");
     caption.idx.textContent = `${pad(i)} / ${pad(n - 1)}`;
-    caption.title.textContent = projects[i].title;
-    caption.cat.textContent = `${projects[i].category} · ${projects[i].year}`;
+    caption.title.textContent = featured[i].title;
+    caption.cat.textContent = `${featured[i].category} · ${featured[i].year}`;
   }
 
   function render() {
