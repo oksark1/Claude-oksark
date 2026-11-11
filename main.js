@@ -39,10 +39,7 @@
     b.setAttribute("aria-label", `${p.title} — ${p.category}`);
     const c = cover(p);
     c.classList.add("cover");
-    const label = document.createElement("span");
-    label.className = "label";
-    label.textContent = p.title;
-    b.append(c, label);
+    b.append(c);
     b.addEventListener("click", (e) => {
       if (moved) { e.preventDefault(); return; }
       if (i === active) openProject(i);
