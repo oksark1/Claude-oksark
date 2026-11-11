@@ -33,9 +33,10 @@
 
   /* cover */
   const coverEl = document.getElementById("caseCover");
-  if (p.image) {
+  const heroSrc = p.hero || p.image;
+  if (heroSrc) {
     const img = el("img");
-    img.src = p.image; img.alt = p.title;
+    img.src = heroSrc; img.alt = p.title;
     coverEl.appendChild(img);
   } else {
     coverEl.classList.add("is-art");

@@ -11,6 +11,8 @@
                Пока image не указан, рисуется абстрактная обложка из palette + shape.
     palette  — [фон, акцент] для автоматической обложки
     shape    — "circle" | "stripes" | "grid" | "phone" | "type" | "arch"
+    hero     — (необязательно) широкая картинка вверху страницы проекта.
+               Если не указана, используется image.
     link     — (необязательно) ссылка на живой сайт, Behance и т.п.
     slug     — (необязательно) адрес страницы: project.html?p=<slug>.
                Если не указан, создаётся из названия.
@@ -30,7 +32,8 @@ window.PROJECTS = [
     year: 2025,
     text: "Landing page for UptimeScan — a Telegram bot that monitors websites, ports and servers and notifies you the moment a resource goes down. Clean, friendly layout with an interactive chat preview of the bot.",
     tags: ["Web design", "Landing", "Telegram bot"],
-    image: "assets/projects/uptimescan.webp",
+    image: "assets/projects/uptimescan-cover.webp",
+    hero: "assets/projects/uptimescan.webp",
     palette: ["#0e1f22", "#27a85a"],
     slug: "uptimescan-bot",
     intro: "UptimeScan is a Telegram bot that keeps an eye on websites, ports and servers and messages you the moment something goes down. The landing page had to explain the product in seconds and get people to open the bot.",
@@ -44,6 +47,7 @@ window.PROJECTS = [
       { p: "The headline says exactly what the product does — “Availability monitoring, right in your Telegram” — with the Telegram logo set inline so the channel is obvious at a glance. Below it, a short paragraph explains the flow in two sentences." },
       { p: "Instead of an abstract illustration, the hero shows the bot itself: a chat window with the /start command, the bot's friendly greeting and the three monitoring types as buttons. Visitors see what they will get before they click." },
       { img: null, caption: "[Placeholder — add more screens: features, plans, FAQ, mobile version.]" },
+      { img: "assets/projects/uptimescan-cover.webp", caption: "The landing page on a desktop display." },
       { h: "Visual language" },
       { p: "A calm, clean layout with lots of white space, a single green accent for actions and a soft mascot-style logo. Bold abstract shapes in green and blue frame the page and give the brand a memorable, playful edge without distracting from the content." },
       { h: "Result" },
